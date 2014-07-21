@@ -1,6 +1,6 @@
 var express = require('express'),
-  app = express(),  // Web framework to handle routing requests
-  MongoClient = require('mongodb').MongoClient, // Driver for connecting to MongoDB
+  app = express(),
+  MongoClient = require('mongodb').MongoClient,
   routes = require('./routes');
 
 
@@ -8,9 +8,11 @@ MongoClient.connect('mongodb://localhost:27017/app', function(err,db) {
   "use strict";
   if(err) throw err;
 
-  // Express middleware to populate 'req.body' so we can access POST variables
   app.use(express.bodyParser());
 
+  app.configure(function() {
+    app.use(express.static(__dirname + '/client'));
+  });
   // Application routes
   routes(app, db);
 

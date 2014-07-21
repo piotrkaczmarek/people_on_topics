@@ -6,7 +6,7 @@ function ContentHandler(db) {
   this.displayMainPage = function(req, res, next) {
     "use strict";
     
-    return res.sendfile(path.resolve('./app/client') + '/index.html');
+    return res.render(path.resolve('./app/client') + '/main_page.jade')
   }
 }
 

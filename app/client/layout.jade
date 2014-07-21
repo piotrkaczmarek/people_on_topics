@@ -1,0 +1,13 @@
+doctype html
+html(lang='en' ng-app='peopleOnTopicsApp')
+  head
+    meta(charset='utf-8')
+    title= pageTitle
+    script(type='text/javascript' src="bower_components/angular/angular.min.js")
+    script(type='text/javascript' src="js/app.js")
+  body
+    header
+      h2 {{2+1}}
+      h1= pageTitle
+    section.content
+      block content
