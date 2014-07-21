@@ -1,13 +1,13 @@
-var path = require('path');
-
-function ContentHandler(db) {
+(function(){
   "use strict"
 
-  this.displayMainPage = function(req, res, next) {
-    "use strict";
-    
-    return res.render(path.resolve('./app/client') + '/main_page.jade')
-  }
-}
+  var path = require('path');
 
-module.exports = ContentHandler;
+  function ContentHandler(db) {
+    this.displayMainPage = function(req, res, next) {
+      return res.render(path.resolve('./app/client') + '/main_page.jade')
+    }
+  }
+
+  module.exports = ContentHandler;
+}());

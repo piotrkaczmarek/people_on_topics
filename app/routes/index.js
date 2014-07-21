@@ -1,9 +1,13 @@
-var ContentHandler = require('./content');
+(function() {
+  "use strict"
 
-module.exports = exports = function(app,db) {
+  var ContentHandler = require('./content');
 
-  var contentHandler = new ContentHandler(db);
+  module.exports = exports = function(app,db) {
 
-  app.get('/', contentHandler.displayMainPage);
+    var contentHandler = new ContentHandler(db);
 
-}
+    app.get('/', contentHandler.displayMainPage);
+
+  }
+}());
