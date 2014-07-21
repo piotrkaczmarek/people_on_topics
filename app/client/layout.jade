@@ -3,11 +3,17 @@ html(lang='en' ng-app='peopleOnTopicsApp')
   head
     meta(charset='utf-8')
     title= pageTitle
+
+    link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+    script(type='text/javascript' src="bower_components/bootstrap/dist/js/bootstrap.min.js")
     script(type='text/javascript' src="bower_components/angular/angular.min.js")
     script(type='text/javascript' src="js/app.js")
   body
     header
-      h2 {{2+1}}
+      h2 {{"Angular " + " works"}}
       h1= pageTitle
     section.content
       block content
