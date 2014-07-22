@@ -5,8 +5,8 @@
   "main": "web.js",
   "private": true,
   "scripts": {
-    "start": "node app/server.js",
-    "debug": "node debug app/server.js",
+    "start": "node app/server/app.js",
+    "debug": "node debug app/server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Piotr Kaczmarek",
