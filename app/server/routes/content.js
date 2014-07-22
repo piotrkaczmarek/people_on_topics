@@ -5,7 +5,7 @@
 
   function ContentHandler(db) {
     this.displayMainPage = function(req, res, next) {
-      return res.render(path.resolve('./app/client') + '/main_page.jade')
+      return res.render(path.resolve('./app/client/views') + '/main_page.jade', {pageTitle: 'People on Topics'})
     }
   }
 

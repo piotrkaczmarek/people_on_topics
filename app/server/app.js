@@ -11,7 +11,9 @@
 
     app.use(express.bodyParser());
 
-    app.configure(function() {
+    app.configure(function() {  
+      app.set('views',path.resolve('./app/client/views'));
+      app.set('view engine', 'jade');
       app.use(express.static(path.resolve('./app/client')));
     });
     // Application routes
