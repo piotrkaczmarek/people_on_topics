@@ -1,23 +1,28 @@
 <div class='dropdown'>
   <button id='dropdownMenu1' class='btn btn-primary btn-med dropdown-toggle' href='#' type='button' data-toggle='dropdown'>
-    You : {{userCtrl.name}}  {{userCtrl.sex}} {{userCtrl.age}}
+    You : {{user.name}}  {{user.sex}} {{user.age}}
   </button>
   <div class='dropdown-menu' role='menu' aria-labelledby='dropdownMenu1'>
     <form name='userProfileForm'>
       <label>Your name:</label>
-      <input ng-model='userCtrl.name' type='name' placeholder='Please enter your name' />
+      <input ng-model='user.name' type='name' placeholder='Please enter your name' />
       <br>
       <label>Your age:</label>
-      <input ng-model='userCtrl.age' type='number' min=13 max=99 ui-mask="{{'99'}}"/>
+      <input ng-model='user.age' type='number' min=13 max=99 ui-mask="{{'99'}}"/>
       <br>
       <div class='btn-group'>
-        <button type='button' class='btn btn-default' ng-click="userCtrl.sex='male'">
+        <button type='button' class='btn btn-default btn-sm' ng-click="user.sex='male'">
           Male
         </button>
-        <button type='button' class='btn btn-default' ng-click="userCtrl.sex='female'">
+        <button type='button' class='btn btn-default btn-sm' ng-click="user.sex='female'">
           Female
         </button>
       </div>
+      <br>
+      <br>
+      <button class='btn btn-primary btn-lg' ng-click='user.start()'>
+        Start!
+      </button>
     </form>
   </div>
 </div>          
