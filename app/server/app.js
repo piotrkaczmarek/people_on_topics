@@ -3,24 +3,22 @@
   var express = require('express'),
     app = express(),
     path = require('path'),
-    MongoClient = require('mongodb').MongoClient,
+    redis = require('redis').createClient(),
     routes = require('./routes');
 
-  MongoClient.connect('mongodb://localhost:27017/app', function(err,db) {
-    if(err) throw err;
 
-    app.use(express.bodyParser());
 
-    app.configure(function() {  
-      app.set('views',path.resolve('./app/client/views'));
-      app.set('view engine', 'jade');
-      app.use(express.static(path.resolve('./app/client')));
-    });
-    // Application routes
-    routes(app, db);
+  app.use(express.bodyParser());
 
-    app.listen(8080);
-    console.log('Express server listening on port 8080');
+  app.configure(function() {  
+    app.set('views',path.resolve('./app/client/views'));
+    app.set('view engine', 'jade');
+    app.use(express.static(path.resolve('./app/client')));
   });
+  // Application routes
+  routes(app, redis);
+
+  app.listen(8080);
+  console.log('Express server listening on port 8080');
 
 }())

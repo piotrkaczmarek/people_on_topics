@@ -3,7 +3,7 @@
 
   var path = require('path');
 
-  function ContentHandler(db) {
+  function ContentHandler() {
     this.displayMainPage = function(req, res, next) {
       return res.render(path.resolve('./app/client/views') + '/main_page.jade', {pageTitle: 'People on Topics'})
     }
