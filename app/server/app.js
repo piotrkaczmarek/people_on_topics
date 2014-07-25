@@ -2,9 +2,12 @@
   "use strict";
   var express = require('express'),
     app = express(),
+    server = require('http').Server(app),
     path = require('path'),
     redis = require('redis').createClient(),
-    routes = require('./routes');
+    routes = require('./routes'),
+    io = require('socket.io').listen(server),
+    socketIoJwt = require('socketio-jwt');
 
 
 
@@ -18,7 +21,17 @@
   // Application routes
   routes(app, redis);
 
-  app.listen(8080);
+  server.listen(8080);
   console.log('Express server listening on port 8080');
+
+  io.use(socketIoJwt.authorize({
+    secret: 'secret',
+    handshake: true
+  }));
+
+  io.on('connection', function(socket) {
+    var user = socket.decoded_token;
+    console.log("Socket connected with: ",user);
+  });
 
 }())

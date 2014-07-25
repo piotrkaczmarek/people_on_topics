@@ -11,12 +11,14 @@ app.controller('userCtrl', function($http) {
   this.start = function() {
     $http.post('/sign_in', user).success(function(data) {
       user.name = data.user_name;
-      console.log('Got: '+ data);
+      io.connect('http://0.0.0.0:8080', {
+        'query': 'token='+data.token
+      }).on('connect', function() {
+        console.log('Socket authenticated');
+        return;
+      });
     });
-
-
   }
-
 });
 
 app.directive('userProfile', function(){
