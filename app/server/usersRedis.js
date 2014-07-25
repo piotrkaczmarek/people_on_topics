@@ -9,7 +9,7 @@ function UsersRedis(redis) {
     return new Error('Error: UsersRedis constructor called without "new" operator');
   }
 
-  this.ensure_uniqueness = function(user_name, callback) {
+  this.get_unique_name = function(user_name, callback) {
     var times_checked = 0;
     var check_uniqueness = function(name, self) {
       redis.hgetall('users:'+name, function(err, data){
