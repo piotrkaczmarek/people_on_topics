@@ -22,8 +22,34 @@ function UsersRedis(redis) {
         }
       });
     };
+
     check_uniqueness(user_name, check_uniqueness);
-  }
+  };
+
+  this.save = function(user, callback) {
+    redis.hmset(['users:'+user.name, 'age', user.age, 'sex', user.sex], function(err,data){
+      if(err) throw err;
+      callback();
+    })
+  };
+
+  this.get = function(user_name, callback) {
+    redis.hgetall('users:'+user_name, function(err,data) {
+      if(err) throw err;
+      
+      var user = {};
+      if(data) {
+        user.name = user_name
+        if(data.age !== 'undefined') {
+          user.age = parseInt(data.age);
+        }
+        if(data.sex !== 'undefined') {
+          user.sex = data.sex;
+        }
+      } 
+      callback(err,user);
+    });
+  };
 }
 
 module.exports.UsersRedis = UsersRedis;
