@@ -1,5 +1,5 @@
 describe('UserValidator', function() {
-  var UserValidator = require('../../app/server/lib/user_validator');
+  var UserValidator = require('../../app/server/lib/userValidator');
 
   describe('.validate', function() {
     describe('not valid', function() {
@@ -37,11 +37,10 @@ describe('UserValidator', function() {
         age: 15
       }
       it('should return that it is valid', function(){
-        expect(UserValidator.validate(user)).toEqual({valid: true})
+        expect(UserValidator.validate(user)).toEqual({valid: true, errors: {}})
       })
 
     })
-
   });
 
 
