@@ -63,6 +63,14 @@ describe('UsersRedis', function() {
           });
         });
       });
+      it('should add user to users set', function(done) {
+        UsersRedis.save(user, function() {
+          redis.smembers('users', function(err,data) {
+            expect(data).toContain('bob');
+            done();
+          });
+        });
+      });
     });
     describe('when only age field is given', function() {
       var user = {
@@ -113,4 +121,79 @@ describe('UsersRedis', function() {
       });
     });
   });
+  describe('.get_all_online', function() {
+    describe('when there are two users online', function() {
+      var users = [
+        { name: 'bob',
+          age: 29,
+          sex: 'male'
+        },
+        {
+          name: 'susan',
+          age: 19
+        }
+      ];
+      beforeEach(function(done) {
+        users.forEach(function(user) {
+          redis.hmset(['users:'+user.name, 'age', user.age, 'sex', user.sex],function() {
+            redis.sadd('users', user.name, function() {
+              done();
+            });
+          });
+        });
+      });
+      it('should return both users data', function(done) {
+        UsersRedis.get_all_online(function(data) {
+          expect(data).toContain(users[0]);
+          expect(data).toContain(users[1]);
+          done();
+        });
+      });
+    });
+    describe('when there are no online users', function() {
+      it('should return empty array', function(done) {
+        UsersRedis.get_all_online(function(users) {
+          expect(users).toEqual([]);
+          done();
+        });
+      });
+    });
+  });
+  describe('.remove', function() {
+    describe('when there is saved user', function() {
+      var user = {
+        name: 'bob',
+        age: 24
+      };
+      beforeEach(function(done) {
+        redis.hmset(['users:'+user.name,'age', user.age], function() {
+          redis.sadd('users', user.name, function() {
+            done();
+          })
+        });
+      });
+      it('should remove the user from redis hash', function(done) {
+        UsersRedis.remove(user.name, function() {
+          redis.hgetall('users:'+user.name, function(err, data) {
+            expect(data).toEqual(null);
+            done();
+          });
+        });
+      });
+      it('should remove the user from redis set', function(done) {
+        UsersRedis.remove(user.name, function() {
+          redis.smembers('users', function(err,data) {
+            expect(data).toEqual([]);
+            done();
+          });
+        });
+      });
+    });
+    describe('when there no such user', function() {
+      it('should not raise exception', function(){
+        expect(UsersRedis.remove,'bob',function(){}).not.toThrow();
+      });
+    });
+  });
+
 });

@@ -29,6 +29,7 @@ function UsersRedis(redis) {
   this.save = function(user, callback) {
     redis.hmset(['users:'+user.name, 'age', user.age, 'sex', user.sex], function(err,data){
       if(err) throw err;
+      redis.sadd('users', user.name);
       callback();
     })
   };
@@ -36,10 +37,10 @@ function UsersRedis(redis) {
   this.get = function(user_name, callback) {
     redis.hgetall('users:'+user_name, function(err,data) {
       if(err) throw err;
-      
+
       var user = {};
       if(data) {
-        user.name = user_name
+        user.name = user_name;
         if(data.age !== 'undefined') {
           user.age = parseInt(data.age);
         }
@@ -50,6 +51,32 @@ function UsersRedis(redis) {
       callback(err,user);
     });
   };
+  this.remove = function(user_name, callback) {
+    redis.del('users:'+user_name,function() {
+      redis.srem('users', user_name, function() {
+        callback();
+      });
+    });
+  };
+  this.get_all_online = function(callback) {
+    var get_user = this.get;
+    redis.smembers('users', function(err, names) {
+      if(err) throw err;
+      var users = [];
+      if(names.length === 0) {
+        return callback([]);
+      }
+      names.forEach(function(name) {
+        get_user(name, function(err, user) {
+          users.push(user);
+          if(users.length === names.length) {
+            callback(users);
+          };
+        });
+      });
+    });
+  };
+
 }
 
 module.exports.UsersRedis = UsersRedis;
