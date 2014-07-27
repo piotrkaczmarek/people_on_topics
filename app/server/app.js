@@ -4,10 +4,9 @@
     app = express(),
     server = require('http').Server(app),
     path = require('path'),
-    redis = require('redis').createClient(),
+    redis = require('redis'),
     routes = require('./routes'),
-    io = require('socket.io').listen(server),
-    socketIoJwt = require('socketio-jwt');
+    socketController = require('./socketController');
 
 
 
@@ -19,19 +18,15 @@
     app.use(express.static(path.resolve('./app/client')));
   });
   // Application routes
-  routes(app, redis);
+  var redisPublisher = redis.createClient(),
+      redisSubscriber = redis.createClient();
 
-  server.listen(8080);
-  console.log('Express server listening on port 8080');
+  routes(app, redisPublisher);
+  socketController(server, redisPublisher, redisSubscriber);
 
-  io.use(socketIoJwt.authorize({
-    secret: 'secret',
-    handshake: true
-  }));
+  var port = 8080
+  server.listen(port);
+  console.log('Express server listening on port '+port);
 
-  io.on('connection', function(socket) {
-    var user = socket.decoded_token;
-    console.log("Socket connected with: ",user);
-  });
 
 }())
