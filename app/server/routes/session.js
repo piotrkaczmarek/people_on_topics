@@ -1,12 +1,7 @@
 
 
 function SessionHander (redis) {
-  'use strict'
-
-
-  var UsersRedis = require('../usersRedis').UsersRedis;
-  var users = new UsersRedis(redis);
-
+  'use strict';
 
   this.handleSignIn = function(req, res, next) {
     var UserValidator = require('../lib/userValidator')
@@ -29,8 +24,7 @@ function SessionHander (redis) {
     } else {
       return res.send(validation);
     }
-  }
-
-}
+  };
+};
 
 module.exports = SessionHander;
