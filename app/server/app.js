@@ -8,8 +8,12 @@
     routes = require('./routes'),
     socketController = require('./socketController');
 
-
-
+  var argv = require('minimist')(process.argv.slice(2));
+  var port = 8080;
+  if(argv.p) {
+    port = argv.p;
+  }
+  
   app.use(express.bodyParser());
 
   app.configure(function() {  
@@ -24,7 +28,6 @@
   routes(app, redisPublisher);
   socketController(server, redisPublisher, redisSubscriber);
 
-  var port = 8080
   server.listen(port);
   console.log('Express server listening on port '+port);
 
