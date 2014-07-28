@@ -13,7 +13,7 @@
   if(argv.p) {
     port = argv.p;
   }
-  
+
   app.use(express.bodyParser());
 
   app.configure(function() {  
@@ -21,7 +21,7 @@
     app.set('view engine', 'jade');
     app.use(express.static(path.resolve('./app/client')));
   });
-  // Application routes
+
   var redisPublisher = redis.createClient(),
       redisSubscriber = redis.createClient();
 
