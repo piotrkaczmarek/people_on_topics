@@ -62,14 +62,14 @@ function UsersRedis(redis) {
     var get_user = this.get;
     redis.smembers('users', function(err, names) {
       if(err) throw err;
-      var users = [];
+      var users = {};
       if(names.length === 0) {
         return callback([]);
       }
       names.forEach(function(name) {
         get_user(name, function(err, user) {
-          users.push(user);
-          if(users.length === names.length) {
+          users[name] = user;
+          if(Object.keys(users).length === names.length) {
             callback(users);
           };
         });

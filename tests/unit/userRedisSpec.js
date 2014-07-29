@@ -123,29 +123,35 @@ describe('UsersRedis', function() {
   });
   describe('.get_all_online', function() {
     describe('when there are two users online', function() {
-      var users = [
-        { name: 'bob',
+      var users = {
+        'bob': { name: 'bob',
           age: 29,
           sex: 'male'
         },
-        {
+        'susan': {
           name: 'susan',
           age: 19
         }
-      ];
+      };
       beforeEach(function(done) {
-        users.forEach(function(user) {
+        var users_ready = 0;
+        var add_user = function(user) {
           redis.hmset(['users:'+user.name, 'age', user.age, 'sex', user.sex],function() {
             redis.sadd('users', user.name, function() {
-              done();
+              users_ready += 1;
+              if(users_ready  >= Object.keys(users).length ) {
+                done();
+              }
             });
-          });
-        });
+          });  
+        }
+        for(key in users) {
+          add_user(users[key]);      
+        };
       });
       it('should return both users data', function(done) {
         UsersRedis.get_all_online(function(data) {
-          expect(data).toContain(users[0]);
-          expect(data).toContain(users[1]);
+          expect(data).toEqual(users);
           done();
         });
       });
@@ -153,7 +159,7 @@ describe('UsersRedis', function() {
     describe('when there are no online users', function() {
       it('should return empty array', function(done) {
         UsersRedis.get_all_online(function(users) {
-          expect(users).toEqual([]);
+          expect(users).toEqual({});
           done();
         });
       });
