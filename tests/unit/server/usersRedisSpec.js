@@ -1,6 +1,6 @@
 describe('UsersRedis', function() {
   var redis = require('redis').createClient();
-  var usersRedis = require('../../app/server/usersRedis').UsersRedis;
+  var usersRedis = require('../../../app/server/usersRedis').UsersRedis;
 
   var UsersRedis = new usersRedis(redis);
   beforeEach(function(done) {

@@ -1,5 +1,5 @@
 describe('UserValidator', function() {
-  var UserValidator = require('../../app/server/lib/userValidator');
+  var UserValidator = require('../../../app/server/lib/userValidator');
 
   describe('.validate', function() {
     describe('not valid', function() {
