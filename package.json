@@ -8,7 +8,7 @@
     "start": "node app/server/app.js",
     "debug": "node debug app/server/app.js",
     "test_debug": "node debug node_modules/jasmine-node/lib/jasmine-node/cli.js tests/ --captureExceptions --forceexit",
-    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/ --captureExceptions --forceexit"
+    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --captureExceptions --forceexit ; (cd tests && karma start --single-run)"
   },
   "author": "Piotr Kaczmarek",
   "license": "BSD-2-Clause",
@@ -35,6 +35,7 @@
     "karma-ie-launcher": "~0.1.5",
     "karma-phantomjs-launcher": "~0.1.4",
     "protractor": "~1.0.0-rc6",
-    "jasmine-node": "~1.14.5"
+    "jasmine-node": "~1.14.5",
+    "angular-mocks": "~1.2.19"
   }
 }
