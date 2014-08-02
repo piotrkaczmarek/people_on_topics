@@ -1,5 +1,5 @@
-app.controller('userListCtrl', function($scope, $http, users) {  
-  users.getUsers(function(data){
-    $scope.users = data;
+app.controller('userListCtrl', function($scope, $http, usersFactory) {  
+  usersFactory.getUsers(function() {
+    $scope.users = usersFactory.users;
   });
 });

@@ -1,4 +1,4 @@
-app.factory('users', function($http) {
+app.factory('usersFactory', function($http, $rootScope) {
   var _users = {};
   var _getUsers = function(callback) {
     $http.get('/users').success(function(data) {
@@ -12,8 +12,22 @@ app.factory('users', function($http) {
     delete _users[name];
   }
   var _addUser = function(user) {
+    if(user.name === undefined) {
+      throw new Error('Factory users.addUser got incomplete user object');
+      return;
+    }
    _users[user.name] = user;
   }
+
+  $rootScope.$on('joins', function(event, data) {
+    var user = JSON.parse(data);
+    _addUser(user);
+  });
+
+  $rootScope.$on('leaves', function(event, data) {
+    _removeUser(data);
+  });
+
   return {
     users: _users,
     getUsers: _getUsers,

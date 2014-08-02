@@ -1,15 +1,11 @@
-app.controller('userProfileCtrl', function($http, $scope, users, socket) {
-  var user = this;
-  user.name = '';
-  user.sex = '';
-  user.age = '';
-  this.start = function() {
-    $http.post('/sign_in', user).success(function(data) {
-      user.name = data.user_name;
-      socket.connect(data.token);
-      users.getUsers(function(data){
-        $scope.users = data;
-      });
+app.controller('userProfileCtrl', function($http, $scope, socketFactory) {
+  $scope.user = {};
+
+  $scope.start = function() {
+    $http.post('/sign_in', $scope.user).success(function(data) {
+      $scope.user.name = data.user_name;
+      socketFactory.connect(data.token);
+      $('.dropdown.open .dropdown-toggle').dropdown('toggle');
     });
   }
 });

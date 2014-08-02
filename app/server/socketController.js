@@ -30,7 +30,8 @@
     io.on('connection', function(socket) {
       var user = socket.decoded_token;
       console.log("Socket connected to: ",user);
-      redisPublisher.publish('joins', user.name);  
+      delete user.iat;
+      redisPublisher.publish('joins', JSON.stringify(user));  
 
       socket.on('disconnect', function() {
         console.log("Socket disconnected from: ",user);

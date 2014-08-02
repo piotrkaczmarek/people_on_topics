@@ -1,10 +1,10 @@
-describe('users', function() {
+describe('usersFactory', function() {
   var factory;
 
   beforeEach(function() {
     module('peopleOnTopicsApp');
-    inject(function(users) {
-      factory = users;
+    inject(function(usersFactory) {
+      factory = usersFactory;
     })
   });
   describe('.users', function() {
