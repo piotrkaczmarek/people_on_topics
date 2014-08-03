@@ -45,4 +45,111 @@ describe('messageBoxesFactory', function() {
       });
     });
   });
+  describe('.add_message', function() {
+    describe('when receiving', function() {
+      describe('when there conversation with given person has already been started', function() {
+        var factory;
+        var users = { 'Johnny':
+                      { name: 'Johnny',
+                      age: 17}
+                    }
+        var user = users.Johnny;
+        beforeEach(function() {
+          var usersFactory = {
+            users: users
+          };
+          module('peopleOnTopicsApp');
+          module(function($provide) {
+            $provide.value('usersFactory', usersFactory)
+          });
+
+          inject(function(messageBoxesFactory) {
+            factory = messageBoxesFactory;
+          });
+          factory.create(user.name);
+        });
+        it('should append new message', function() {
+          factory.add_message('Johnny','Johnny', 'Hello Bob!');
+          expect(factory.messageBoxes['Johnny'].messages.length).toEqual(1);
+        });
+        it('should save sender name', function() {
+          factory.add_message('Johnny','Johnny', 'Hello Bob!');
+          expect(factory.messageBoxes['Johnny'].messages[0].from).toEqual('Johnny');
+        });
+        it('should save message body', function() {
+          factory.add_message('Johnny','Johnny', 'Hello Bob!');
+          expect(factory.messageBoxes['Johnny'].messages[0].body).toEqual('Hello Bob!');
+        });
+      });
+      describe('when there was no conversation with given person', function() {
+        describe('but that person is logged in', function() {
+          var factory;
+          var users = { 'Johnny':
+                        { name: 'Johnny',
+                        age: 17}
+                      }
+          beforeEach(function() {
+            var usersFactory = {
+              users: users
+            };
+            module('peopleOnTopicsApp');
+            module(function($provide) {
+              $provide.value('usersFactory', usersFactory)
+            });
+            inject(function(messageBoxesFactory) {
+              factory = messageBoxesFactory;
+            });
+          });
+          it('should append new message', function() {
+            factory.add_message('Johnny','Johnny', 'Hello Bob!');
+            expect(factory.messageBoxes['Johnny'].messages.length).toEqual(1);
+          });
+          it('should save sender name', function() {
+            factory.add_message('Johnny','Johnny', 'Hello Bob!');
+            expect(factory.messageBoxes['Johnny'].messages[0].from).toEqual('Johnny');
+          });
+          it('should save message body', function() {
+            factory.add_message('Johnny','Johnny', 'Hello Bob!');
+            expect(factory.messageBoxes['Johnny'].messages[0].body).toEqual('Hello Bob!');
+          });
+        });
+      });
+    });
+    describe('when sending', function() {
+      describe('when there conversation with given person has already been started', function() {
+        var factory;
+        var users = { 'Johnny':
+                      { name: 'Johnny',
+                      age: 17}
+                    }
+        var user = users.Johnny;
+        beforeEach(function() {
+          var usersFactory = {
+            users: users
+          };
+          module('peopleOnTopicsApp');
+          module(function($provide) {
+            $provide.value('usersFactory', usersFactory)
+          });
+
+          inject(function(messageBoxesFactory) {
+            factory = messageBoxesFactory;
+          });
+          factory.create(user.name);
+        });
+        it('should append new message', function() {
+          factory.add_message('Johnny','Bob', 'Hello Johnny!');
+          expect(factory.messageBoxes['Johnny'].messages.length).toEqual(1);
+        });
+        it('should save sender name', function() {
+          factory.add_message('Johnny','Bob', 'Hello Johnny!');
+          expect(factory.messageBoxes['Johnny'].messages[0].from).toEqual('Bob');
+        });
+        it('should save message body', function() {
+          factory.add_message('Johnny','Bob', 'Hello Johnny!');
+          expect(factory.messageBoxes['Johnny'].messages[0].body).toEqual('Hello Johnny!');
+        });
+      });
+    });
+  });
 });
