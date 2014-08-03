@@ -13,7 +13,7 @@
       handshake: true
     }));
 
-    redisSubscriber.subscribe('joins', 'leaves');
+    redisSubscriber.subscribe('joins', 'leaves', 'message_sent');
     
     redisSubscriber.on('message', function(channel, message) {
       console.log('redisSubscriber got: ',message," on: ",channel);
@@ -24,6 +24,15 @@
           console.log('Removed ',message);
           io.sockets.emit('leaves', message);
         });
+      } else if(channel === 'message_sent') {
+          var recipient = JSON.parse(message).to;
+          for(var socket in io.sockets.connected) {
+            if(io.sockets.connected.hasOwnProperty(socket) &&
+             io.sockets.connected[socket].decoded_token.name === recipient) {
+              console.log('Sending to ',recipient,'message:\n\t',message);
+              io.sockets.connected[socket].emit('message', message);
+            }
+          }
       }
     });
 
@@ -31,7 +40,12 @@
       var user = socket.decoded_token;
       console.log("Socket connected to: ",user);
       delete user.iat;
-      redisPublisher.publish('joins', JSON.stringify(user));  
+      redisPublisher.publish('joins', JSON.stringify(user)); 
+
+      socket.on('message', function (data) {
+        data.from = user.name;
+        redisPublisher.publish('message_sent', JSON.stringify(data));
+      });
 
       socket.on('disconnect', function() {
         console.log("Socket disconnected from: ",user);

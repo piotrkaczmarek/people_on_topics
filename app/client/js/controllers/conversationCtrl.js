@@ -1,6 +1,9 @@
-app.controller('conversationCtrl', function($scope) {
+app.controller('conversationCtrl', function($scope, socketFactory,messageBoxesFactory, currentUser) {
+  var user = $scope.user;
 
   $scope.send = function() {
-    console.log('sending ',this.new_message,' to ', this.messageBox.user);
+    socketFactory.send_message(this.messageBox.user.name, this.new_message);
+    var user = currentUser.getUser();
+    messageBoxesFactory.add_message(this.messageBox.user.name, user.name, this.new_message);
   }
 });

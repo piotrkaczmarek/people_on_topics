@@ -6,6 +6,15 @@ app.factory('socketFactory', function($rootScope) {
     })
     registerEvents(_socket);
   };
+  var _send_message = function(recipient, body) {
+    _socket.emit('message', 
+      {
+        to: recipient,
+        body: body
+      }
+    );
+    console.log('sending ',body,' to ', recipient);
+  }
   var registerEvents = function(socket) {
     socket.on('connect', function() {
       console.log('Socket authenticated');
@@ -22,8 +31,15 @@ app.factory('socketFactory', function($rootScope) {
         $rootScope.$broadcast('leaves', data);
       });
     });
+
+    socket.on('message', function(data) {
+      $rootScope.$apply(function() {
+        $rootScope.$broadcast('message', data);
+      });
+    });
   }
   return {
-    connect: _connect
+    connect: _connect,
+    send_message: _send_message
   }
 });
