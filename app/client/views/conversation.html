@@ -3,8 +3,10 @@
 </div>
 <ul>
   <li ng-repeat='message in messageBox.messages'>
-    {{message.body}}
+    {{message.from}}: {{message.body}}
   </li>
 </ul>
-<input ng-model='new_message' placeholder='Say to {{messageBox.user.name}}'></input>
-<button class='btn btn-sm' ng-click='send()'>Send</button>
+<form name='newMessageForm'>
+  <input ng-model='new_message' placeholder='Say to {{messageBox.user.name}}'></input>
+  <button class='btn btn-sm' ng-click='send()'>Send</button>
+</form>
