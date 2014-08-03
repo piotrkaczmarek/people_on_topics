@@ -1,6 +1,8 @@
 <h2>Others:</h2>
 <ul >
   <li class='user_button' ng-repeat='user in users'>
-    {{user.name}} {{user.age}} {{user.sex}}
+    <div class='btn btn-primary' ng-click='openMessageBox(user.name)'>
+      {{user.name}} {{user.age}} {{user.sex}}
+    </div>
   </li>
 </ul>
