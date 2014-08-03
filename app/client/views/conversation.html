@@ -1,0 +1,10 @@
+<div class='btn btn-primary'>
+  {{messageBox.user.name}} {{messageBox.user.age}} {{messageBox.user.sex}}
+</div>
+<ul>
+  <li ng-repeat='message in messageBox.messages'>
+    {{message.body}}
+  </li>
+</ul>
+<input ng-model='new_message' placeholder='Say to {{messageBox.user.name}}'></input>
+<button class='btn btn-sm' ng-click='send()'>Send</button>
