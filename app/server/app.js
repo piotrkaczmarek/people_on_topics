@@ -33,7 +33,7 @@
   });
 
   routes(app, redisPublisher);
-  socketController(redisPublisher, redisSubscriber, io, socketIoJwt);
+  socketController(redisPublisher, io, socketIoJwt);
   socketRedisCoordinator(redisSubscriber, usersRedis, io);
 
   server.listen(port);

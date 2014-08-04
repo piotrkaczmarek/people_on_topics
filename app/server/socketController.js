@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  module.exports = exports = function(redisPublisher, redisSubscriber, io, socketIoJwt) {
+  module.exports = exports = function(redisPublisher, io, socketIoJwt) {
 
     io.use(socketIoJwt.authorize({
       secret: 'secret',
