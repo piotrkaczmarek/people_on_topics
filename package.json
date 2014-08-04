@@ -8,7 +8,9 @@
     "start": "node app/server/app.js",
     "debug": "node debug app/server/app.js",
     "test_debug": "node debug node_modules/jasmine-node/lib/jasmine-node/cli.js tests/ --captureExceptions --forceexit",
-    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --captureExceptions --forceexit ; (cd tests && karma start --single-run)"
+    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --captureExceptions --forceexit ; (cd tests && karma start --single-run)",
+    "test_e2e": "./node_modules/protractor-multi/bin/protractor-multi tests/protractor-multi_conf.js",
+    "test_e2e_debug": "./node_modules/protractor-multi/bin/protractor-multi debug tests/protractor-multi_conf.js"
   },
   "author": "Piotr Kaczmarek",
   "license": "BSD-2-Clause",
@@ -34,7 +36,7 @@
     "karma-safari-launcher": "~0.1.1",
     "karma-ie-launcher": "~0.1.5",
     "karma-phantomjs-launcher": "~0.1.4",
-    "protractor": "~1.0.0-rc6",
+    "protractor-multi": "bobthekingofegypt/protractor#8ac849a5225698efc260d6e26307bccfe9801693",
     "jasmine-node": "~1.14.5",
     "angular-mocks": "~1.2.19"
   }
