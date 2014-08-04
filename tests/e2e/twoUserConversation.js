@@ -1,6 +1,7 @@
 describe('twoUserConversation', function () {
   var browserOne = protractors[0].browser;
   var browserTwo = protractors[1].browser;
+  var redis = require('redis').createClient();
 
   var log_in = function(browser, name) {
     browser.get('http://localhost:8080');
@@ -16,6 +17,11 @@ describe('twoUserConversation', function () {
       }
     });
   }
+  beforeEach(function() {
+    redis.flushall(function(err) {
+      if(err) throw err;
+    })
+  });
   describe('when both users log in', function() {
     var users = ['Bob', 'Susan'];
     beforeEach(function() {
@@ -26,6 +32,14 @@ describe('twoUserConversation', function () {
       has_users(browserOne, users);
       has_users(browserTwo, users);
     });
+    describe('when Bob leaves', function() {
+      beforeEach(function() {
+        redis.publish('leaves', 'Bob');
+      });
+      it('Susan should not see him', function() {
+        expect(browserOne.element.all(by.css('.user_button')).count()).toEqual(1);
+      });
+    })
     describe('when Bob talks to Susan', function() {
       beforeEach(function() {
         browserOne.element.all(by.css('.user_button .btn')).last().click();
