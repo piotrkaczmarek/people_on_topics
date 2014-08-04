@@ -7,8 +7,9 @@
   "scripts": {
     "start": "node app/server/app.js",
     "debug": "node debug app/server/app.js",
-    "test_debug": "node debug node_modules/jasmine-node/lib/jasmine-node/cli.js tests/ --captureExceptions --forceexit",
-    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --captureExceptions --forceexit ; (cd tests && karma start --single-run)",
+    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --captureExceptions --forceexit ; (cd tests && karma start --single-run); ./node_modules/protractor-multi/bin/protractor-multi tests/protractor-multi_conf.js",
+    "test_unit": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --captureExceptions --forceexit ; (cd tests && karma start --single-run)",
+    "test_unit_debug": "node debug node_modules/jasmine-node/lib/jasmine-node/cli.js tests/ --captureExceptions --forceexit",
     "test_e2e": "./node_modules/protractor-multi/bin/protractor-multi tests/protractor-multi_conf.js",
     "test_e2e_debug": "./node_modules/protractor-multi/bin/protractor-multi debug tests/protractor-multi_conf.js"
   },
