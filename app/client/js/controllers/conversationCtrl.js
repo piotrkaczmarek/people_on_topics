@@ -5,5 +5,6 @@ app.controller('conversationCtrl', function($scope, socketFactory,messageBoxesFa
     socketFactory.send_message(this.messageBox.user.name, this.new_message);
     var user = currentUser.getUser();
     messageBoxesFactory.add_message(this.messageBox.user.name, user.name, this.new_message);
+    this.new_message = "";
   }
 });
