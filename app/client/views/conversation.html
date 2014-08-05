@@ -1,13 +1,17 @@
-<div class='btn btn-primary'>
-  {{messageBox.user.name}} {{messageBox.user.age}} {{messageBox.user.sex}}
+<div class='message-box-label'>
+  <span class='label label-primary'>
+    {{messageBox.user.name}} {{messageBox.user.age}} {{messageBox.user.sex}}
+  </span>
 </div>
-<ul>
-  <li  ng-repeat='message in messageBox.messages'>
-    <div id="message_{{$index}}" class='message'>
-      {{message.from}}: {{message.body}}
-    </div>
-  </li>
-</ul>
+<div class='message-box-body'>
+  <ul>
+    <li  ng-repeat='message in messageBox.messages'>
+      <div id="message_{{$index}}" class='message'>
+        {{message.from}}: {{message.body}}
+      </div>
+    </li>
+  </ul>
+</div>
 <form name='newMessageForm'>
   <input id='{{messageBox.user.name}}_msg' ng-model='new_message' placeholder='Say to {{messageBox.user.name}}'></input>
   <button class='send_button btn btn-sm' ng-click='send()'>Send</button>
