@@ -29,6 +29,16 @@ describe('messageBoxesFactory', function() {
         factory.create(user.name);
         expect(factory.messageBoxes[user.name].user).toEqual(user);
       });
+      describe('when the conversation has already been started', function() {
+        beforeEach(function() {
+          factory.create(user.name);
+          factory.add_message(user.name,user.name, 'Hello!');
+        });
+        it('should not delete previous messages', function () {
+          factory.create(user.name);
+          expect(factory.messageBoxes[user.name].messages).toEqual([{from: user.name, body: 'Hello!'}]);
+        });
+      });
     });
     describe('when there is no such user', function() {
       var factory;

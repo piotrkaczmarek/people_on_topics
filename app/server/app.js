@@ -15,9 +15,6 @@
     usersRedis = new UsersRedis(redisPublisher),
     socketRedisCoordinator = require('./socketRedisCoordinator');
         
-
-
-
   var argv = require('minimist')(process.argv.slice(2));
   var port = 8080;
   if(argv.p) {
@@ -38,6 +35,4 @@
 
   server.listen(port);
   console.log('Express server listening on port '+port);
-
-
 }())

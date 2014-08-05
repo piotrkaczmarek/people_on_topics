@@ -1,6 +1,9 @@
 app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
   var _messageBoxes = {};
   var _create = function(name) {
+    if(_messageBoxes[name]) {
+      return true;
+    }
     var user = usersFactory.users[name];
     if(user) {
       _messageBoxes[name] = { 
