@@ -22,5 +22,5 @@
         redisPublisher.publish('leaves', user.name);
       });
     });
-  }
+  };
 }());

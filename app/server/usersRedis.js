@@ -31,7 +31,7 @@ function UsersRedis(redis) {
       if(err) throw err;
       redis.sadd('users', user.name);
       callback();
-    })
+    });
   };
 
   this.get = function(user_name, callback) {
@@ -71,7 +71,7 @@ function UsersRedis(redis) {
           users[name] = user;
           if(Object.keys(users).length === names.length) {
             callback(users);
-          };
+          }
         });
       });
     });

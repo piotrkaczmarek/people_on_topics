@@ -17,10 +17,10 @@ app.controller('userProfileCtrl', function($http, $scope, socketFactory, usersFa
         } else {
           $scope.logged_in = false;
           $scope.errors = data.errors;
-        };
+        }
       }).
       error(function() {
         $scope.logged_in = false;
       });
-  }
+  };
 });

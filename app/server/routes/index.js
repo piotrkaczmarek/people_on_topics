@@ -1,9 +1,9 @@
 (function() {
-  "use strict"
+  "use strict";
 
-  var ContentHandler = require('./content')
-    , SessionHander = require('./session')
-    , UsersHandler = require('./users');
+  var ContentHandler = require('./content'),
+      SessionHander = require('./session'),
+      UsersHandler = require('./users');
 
   module.exports = exports = function(app,redis) {
 
@@ -15,5 +15,5 @@
     app.get('/users', usersHandler.handleGetUserList);
     app.post('/sign_in', sessionHandler.handleSignIn);
 
-  }
+  };
 }());

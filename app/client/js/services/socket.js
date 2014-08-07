@@ -17,7 +17,7 @@ app.factory('socketFactory', function($rootScope) {
       }
     );
     console.log('sending ',body,' to ', recipient);
-  }
+  };
   var registerEvents = function(socket) {
     socket.on('joins', function(data) {
       $rootScope.$apply(function() {
@@ -36,9 +36,9 @@ app.factory('socketFactory', function($rootScope) {
         $rootScope.$broadcast('message', data);
       });
     });
-  }
+  };
   return {
     connect: _connect,
     send_message: _send_message
-  }
+  };
 });

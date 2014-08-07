@@ -1,13 +1,5 @@
-'use strict'
+(function() {
+  'use strict';
 
-var app = angular.module('peopleOnTopicsApp', []);
-
-
-
-
-
-
-
-
-
-
+  var app = angular.module('peopleOnTopicsApp', []);
+}());

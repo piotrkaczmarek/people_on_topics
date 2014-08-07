@@ -4,15 +4,15 @@ exports.validate = function(user) {
       return {
         valid: false,
         errors: {
-          name: "Can't be blank."
+          name: "can't be blank."
         }
       };
     } else {
       return {
         valid: true,
         errors: {}
-      }
+      };
     }
-  }
+  };
   return validate_name(user.name);
-}
+};

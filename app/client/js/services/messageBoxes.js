@@ -9,7 +9,7 @@ app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
       _messageBoxes[name] = { 
         user: user,
         messages: []
-      }
+      };
       return true;
     } else {
       return false;
@@ -25,7 +25,7 @@ app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
       from: from,
       body: body
     });
-  }
+  };
 
 
   $rootScope.$on('message', function(event,data) {

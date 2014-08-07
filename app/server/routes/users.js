@@ -10,6 +10,6 @@ function UsersHandler (redis) {
       return res.send(users);
     });
   };
-};
+}
 
 module.exports = UsersHandler;

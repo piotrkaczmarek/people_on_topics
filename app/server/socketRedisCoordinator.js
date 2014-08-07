@@ -33,5 +33,5 @@
         send_message(message);
       }
     });
-  }
+  };
 }());
