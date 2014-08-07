@@ -1,0 +1,10 @@
+<h2>Your topics:</h2>
+<div class='topic_tag' ng-repeat='(topic_name, topic_value) in topics'>
+  {{topic_name}}
+</div>
+<form name='userTopicsForm'>
+  <input ng-model='new_topic' type='text' placeholder='What you want to talk about...'/>
+  <button id='add_topic_button' class='btn btn-primary btn-sm' ng-click='add_topic()'>
+    Add
+  </button>
+</form>
