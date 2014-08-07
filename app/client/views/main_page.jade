@@ -8,9 +8,11 @@ block content
           h2 People
         div.row
           user-profile
-          user-list
+          user-list(ng-show='logged_in')
       div.col-xs-6
         div.row
           h2 Topics
-    div.row
+        div.row
+          user-topics
+    div.row(ng-show='logged_in')
       message-boxes

@@ -1,28 +1,26 @@
-<div class='dropdown'>
-  <button id='dropdownMenu1' class='btn btn-primary btn-med dropdown-toggle' href='#' type='button' data-toggle='dropdown'>
-    You : {{user.name}}  {{user.sex}} {{user.age}}
-  </button>
-  <div class='dropdown-menu' role='menu' aria-labelledby='dropdownMenu1'>
-    <form name='userProfileForm'>
-      <label>Your name:</label>
-      <input ng-model='user.name' type='name' placeholder='Please enter your name' />
-      <br>
-      <label>Your age:</label>
-      <input ng-model='user.age' type='number' min=13 max=99 ui-mask="{{'99'}}"/>
-      <br>
-      <div class='btn-group'>
-        <button type='button' class='btn btn-default btn-sm' ng-click="user.sex='male'">
-          Male
-        </button>
-        <button type='button' class='btn btn-default btn-sm' ng-click="user.sex='female'">
-          Female
-        </button>
-      </div>
-      <br>
-      <br>
-      <button id='start_button' class='btn btn-primary btn-lg' ng-click='start()'>
-        Start!
+<div class='btn btn-primary btn-med'>
+  You : {{current_user.name}}  {{current_user.sex}} {{current_user.age}}
+</div>
+<div ng-hide='logged_in'>
+  <form name='userProfileForm'>
+    <label>Your name:</label>
+    <input ng-model='current_user.name' type='name' placeholder='Please enter your name' />
+    <br>
+    <label>Your age:</label>
+    <input ng-model='current_user.age' type='number' min=13 max=99 ui-mask="{{'99'}}"/>
+    <br>
+    <div class='btn-group'>
+      <button type='button' class='btn btn-default btn-sm' ng-click="current_user.sex='male'">
+        Male
       </button>
-    </form>
-  </div>
+      <button type='button' class='btn btn-default btn-sm' ng-click="current_user.sex='female'">
+        Female
+      </button>
+    </div>
+    <br>
+    <br>
+    <button id='start_button' class='btn btn-primary btn-lg' ng-click='start()'>
+      Start!
+    </button>
+  </form>
 </div>

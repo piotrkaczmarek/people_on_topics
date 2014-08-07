@@ -1,16 +1,26 @@
 app.controller('userProfileCtrl', function($http, $scope, socketFactory, usersFactory,currentUser) {
-  $scope.user = {};
+  $scope.current_user = {};
 
   $scope.start = function() {
-    $http.post('/sign_in', $scope.user).success(function(data) {
-      $scope.user.name = data.user_name;
-      currentUser.setUser($scope.user);
-      
-      socketFactory.connect(data.token);
-      $('.dropdown.open .dropdown-toggle').dropdown('toggle');
+    $scope.logged_in = true;
+    var socket_connection_callback = function(err) {
       usersFactory.getUsers(function() {
-        $scope.users = usersFactory.users;
+        $scope.current_users = usersFactory.users;
       });
-    });
+    };
+    $http.post('/sign_in', $scope.current_user).
+      success(function(data) {
+        if(data.valid) {
+          $scope.current_user.name = data.user_name;
+          currentUser.setUser($scope.current_user);
+          socketFactory.connect(data.token,socket_connection_callback);
+        } else {
+          $scope.logged_in = false;
+          $scope.errors = data.errors;
+        };
+      }).
+      error(function() {
+        $scope.logged_in = false;
+      });
   }
 });

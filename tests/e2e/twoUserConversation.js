@@ -5,17 +5,9 @@ describe('twoUserConversation', function () {
 
   var log_in = function(browser, name) {
     browser.get('http://localhost:8080');
-    browser.element(by.id('dropdownMenu1')).click();
-    browser.element(by.model('user.name')).sendKeys(name);
-    browser.element(by.model('user.age')).sendKeys('20');
+    browser.element(by.model('current_user.name')).sendKeys(name);
+    browser.element(by.model('current_user.age')).sendKeys('20');
     browser.element(by.id('start_button')).click();
-  }
-  var has_users = function(browser, names) {
-    browser.element.all(by.css('.user_button')).then(function(elements) {
-      for(var i = 0; i < names.length; i++) {
-        expect(elements[i].getText()).toContain(names[i]);
-      }
-    });
   }
   beforeEach(function() {
     redis.flushall(function(err) {
@@ -27,10 +19,6 @@ describe('twoUserConversation', function () {
     beforeEach(function() {
       log_in(browserOne, users[0]);
       log_in(browserTwo, users[1]);
-    });
-    it('they should see each other', function() {
-      has_users(browserOne, users);
-      has_users(browserTwo, users);
     });
     describe('when Bob leaves', function() {
       beforeEach(function() {
