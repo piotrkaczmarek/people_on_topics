@@ -2,6 +2,9 @@ extends layout
 
 block content
   div.container
+    div.row(ng-show='errors')
+      div.panel.panel-danger(ng-repeat='(name, message) in errors')
+        {{name}} : {{message}}
     div.row
       div.col-xs-6
         div.row
