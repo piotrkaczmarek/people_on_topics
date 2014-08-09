@@ -1,5 +1,3 @@
-(function() {
-  'use strict';
+'use strict';
 
-  var app = angular.module('peopleOnTopicsApp', []);
-}());
+var app = angular.module('peopleOnTopicsApp', []);
