@@ -30,7 +30,7 @@ describe('twoUserConversation', function () {
     })
     describe('when Bob talks to Susan', function() {
       beforeEach(function() {
-        browserOne.element.all(by.css('.user_button .btn')).last().click();
+        browserOne.element(by.id('Susan_open_message_box')).click();
         browserOne.element(by.id('Susan_msg')).sendKeys('Hi Susan');
         browserOne.element(by.css('.send_button')).click();
       });
