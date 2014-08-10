@@ -12,9 +12,16 @@
     redisPublisher = redis.createClient(),
     redisSubscriber = redis.createClient(),
     socketRedisCoordinator = require('./socketRedisCoordinator'),
-    UsersRedis = require('./usersRedis').UsersRedis;
+    elasticsearch = require('elasticsearch'),
+    UsersRedis = require('./usersRedis').UsersRedis,
+    UsersElasticSearch = require('./usersElasticSearch').UsersElasticSearch;
 
-  var usersDAO = new UsersRedis(redisPublisher);
+  var esClient = elasticsearch.Client({
+    host: 'localhost:9200'
+  });
+  var usersDAO = new UsersElasticSearch(esClient);
+
+  // var usersDAO = new UsersRedis(redisPublisher);
         
   var argv = require('minimist')(process.argv.slice(2));
   var port = 8080;

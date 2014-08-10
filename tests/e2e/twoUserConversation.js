@@ -2,6 +2,10 @@ describe('twoUserConversation', function () {
   var browserOne = protractors[0].browser;
   var browserTwo = protractors[1].browser;
   var redis = require('redis').createClient();
+  var elasticsearch = require('elasticsearch');
+  var esClient = new elasticsearch.Client({
+    host: 'localhost:9200'
+  });
 
   var log_in = function(browser, name) {
     browser.get('http://localhost:8000');
@@ -10,9 +14,8 @@ describe('twoUserConversation', function () {
     browser.element(by.id('start_button')).click();
   }
   beforeEach(function() {
-    redis.flushall(function(err) {
-      if(err) throw err;
-    })
+    esClient.deleteByQuery({index: 'users', body: {query: {match_all: {}}}});
+    redis.flushall();
   });
   describe('when both users log in', function() {
     var users = ['Bob', 'Susan'];
