@@ -9,6 +9,7 @@ describe('UsersRedis', function() {
       done();
     });
   });
+  var topics = ['weather', 'travels'];
   describe('.get_unique_name', function() {
     describe('when name is already taken', function() {
       var username = 'bob';
@@ -56,13 +57,13 @@ describe('UsersRedis', function() {
         sex: 'male'
       };
       it('should return the same user', function(done) {
-        UsersRedis.add(user, function(data) {
+        UsersRedis.add(user, topics, function(data) {
           expect(data).toEqual(user);
           done();
         });
       });
       it('should save the user', function() {
-        UsersRedis.add(user, function() {
+        UsersRedis.add(user, topics, function() {
           UsersRedis.get(user.name,function(returned_user) {
             expect(returned_user).toEqual(user);
           });
@@ -77,7 +78,7 @@ describe('UsersRedis', function() {
       };
       beforeEach(function(done) {
         redis.flushall(function() {
-          UsersRedis.save(user,function() {
+          UsersRedis.save(user, topics, function() {
             done();
           });
         });
@@ -88,13 +89,13 @@ describe('UsersRedis', function() {
         });
       });
       it('should return user with updated name', function(done) {
-        UsersRedis.add(user,function(data) {
+        UsersRedis.add(user, topics, function(data) {
           expect(data.name).toEqual('bob_1');
           done();
         });
       });
       it('should save the user with unique name', function(done) {
-        UsersRedis.add(user,function(saved_user) {
+        UsersRedis.add(user, topics,function(saved_user) {
           UsersRedis.get(saved_user.name, function(returned_user) {
             expect(returned_user).toEqual(saved_user);
             done();
@@ -102,7 +103,7 @@ describe('UsersRedis', function() {
         });
       });
       it('should create only one user', function(done) {
-        UsersRedis.add(user,function() {
+        UsersRedis.add(user, topics,function() {
           UsersRedis.get_all_online(function(users) {
             expect(Object.keys(users).length).toEqual(2);
             done();
@@ -119,7 +120,7 @@ describe('UsersRedis', function() {
         sex: 'male'
       }
       it('should save user correctly', function(done) {
-        UsersRedis.save(user, function() {
+        UsersRedis.save(user, topics, function() {
           redis.hgetall('users:'+user.name, function(err,data){
             expect(data).toEqual({age: user.age.toString(), sex: user.sex});
             done();
@@ -127,7 +128,7 @@ describe('UsersRedis', function() {
         });
       });
       it('should add user to users set', function(done) {
-        UsersRedis.save(user, function() {
+        UsersRedis.save(user, topics, function() {
           redis.smembers('users', function(err,data) {
             expect(data).toContain('bob');
             done();
@@ -141,7 +142,7 @@ describe('UsersRedis', function() {
         age: 19
       }
       it('should save user correctly', function(done) {
-        UsersRedis.save(user, function() {
+        UsersRedis.save(user, topics, function() {
           redis.hgetall('users:'+user.name, function(err,data){
             expect(data).toEqual({age: user.age.toString(), sex: 'undefined'})
             done();

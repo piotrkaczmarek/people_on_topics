@@ -8,10 +8,11 @@ function SessionHander (usersDAO, socket_url) {
   this.handleSignIn = function(req, res, next) {
 
     var user = req.body;   
+    var topics = []; //empty placeholder for now
     var validation = UserValidator.validate(user);
 
     if(validation.valid) {
-      usersDAO.add(user, function(data) {
+      usersDAO.add(user, topics, function(data) {
         validation.user_name = data.name;
         validation.token = Jwt.sign(data, 'secret');
         validation.socket_url = socket_url;

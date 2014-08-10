@@ -25,18 +25,18 @@ function UsersRedis(redis) {
     check_uniqueness(user_name, check_uniqueness);
   };
 
-  this.save = function(user, callback) {
+  this.save = function(user, topics, callback) {
     redis.hmset(['users:'+user.name, 'age', user.age, 'sex', user.sex], function(err,data){
       if(err) throw err;
       redis.sadd('users', user.name);
       callback();
     });
   };
-  this.add = function(user, callback) {
+  this.add = function(user, topics, callback) {
     var save_user = this.save;
     this.get_unique_name(user.name, function(unique_name) {
       user.name = unique_name;
-      save_user(user,function() {
+      save_user(user, topics, function() {
         callback(user);
       });
     });
