@@ -11,9 +11,10 @@
     socketIoJwt = require('socketio-jwt'),
     redisPublisher = redis.createClient(),
     redisSubscriber = redis.createClient(),
-    UsersRedis = require('./usersRedis').UsersRedis,
-    usersRedis = new UsersRedis(redisPublisher),
-    socketRedisCoordinator = require('./socketRedisCoordinator');
+    socketRedisCoordinator = require('./socketRedisCoordinator'),
+    UsersRedis = require('./usersRedis').UsersRedis;
+
+  var usersDAO = new UsersRedis(redisPublisher);
         
   var argv = require('minimist')(process.argv.slice(2));
   var port = 8080;
@@ -31,9 +32,9 @@
     app.use(express.static(path.resolve('./app/client')));
   });
 
-  routes(app, usersRedis,socket_url);
+  routes(app, usersDAO,socket_url);
   socketController(redisPublisher, io, socketIoJwt);
-  socketRedisCoordinator(redisSubscriber, usersRedis, io);
+  socketRedisCoordinator(redisSubscriber, usersDAO, io);
 
   server.listen(port);
   console.log('Express server listening on port '+port);
