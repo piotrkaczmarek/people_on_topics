@@ -48,6 +48,69 @@ describe('UsersRedis', function() {
       });
     });
   });
+  describe('.add', function() {
+    describe('when name is not taken', function() {
+      var user = {
+        name: 'bob',
+        age: 17,
+        sex: 'male'
+      };
+      it('should return the same user', function(done) {
+        UsersRedis.add(user, function(data) {
+          expect(data).toEqual(user);
+          done();
+        });
+      });
+      it('should save the user', function() {
+        UsersRedis.add(user, function() {
+          UsersRedis.get(user.name,function(returned_user) {
+            expect(returned_user).toEqual(user);
+          });
+        });
+      });
+    });
+    describe('when name is taken', function() {
+      var user = {
+        name: 'bob',
+        age: 17,
+        sex: 'male'
+      };
+      beforeEach(function(done) {
+        redis.flushall(function() {
+          UsersRedis.save(user,function() {
+            done();
+          });
+        });
+      });
+      afterEach(function(done) {
+        redis.flushall(function() {
+          done();
+        });
+      });
+      it('should return user with updated name', function(done) {
+        UsersRedis.add(user,function(data) {
+          expect(data.name).toEqual('bob_1');
+          done();
+        });
+      });
+      it('should save the user with unique name', function(done) {
+        UsersRedis.add(user,function(saved_user) {
+          UsersRedis.get(saved_user.name, function(returned_user) {
+            expect(returned_user).toEqual(saved_user);
+            done();
+          });
+        });
+      });
+      it('should create only one user', function(done) {
+        UsersRedis.add(user,function() {
+          UsersRedis.get_all_online(function(users) {
+            expect(Object.keys(users).length).toEqual(2);
+            done();
+          });
+        });
+      });
+    });
+  });
   describe('.save', function() {
     describe('when all fields are given', function() {
       var user = {
@@ -100,13 +163,13 @@ describe('UsersRedis', function() {
         })
       });
       it('should match original user', function(done) {
-        UsersRedis.get(user.name, function(err,returned_user) {
+        UsersRedis.get(user.name, function(returned_user) {
           expect(returned_user).toEqual(user);
           done();
         })
       });
       it('there should be no undefined fields in returned user', function(done){
-        UsersRedis.get(user.name, function(err,returned_user) {
+        UsersRedis.get(user.name, function(returned_user) {
           expect(returned_user.sex).not.toBeDefined();
           done();
         });
@@ -114,7 +177,7 @@ describe('UsersRedis', function() {
     });
     describe('when there is no such user', function() {
       it('should return empty object',function(done) {
-        UsersRedis.get('bob', function(err,returned_user) {
+        UsersRedis.get('bob', function(returned_user) {
           expect(returned_user).toEqual({});
           done();
         })
@@ -195,9 +258,11 @@ describe('UsersRedis', function() {
         });
       });
     });
-    describe('when there no such user', function() {
+    describe('when there is no such user', function() {
       it('should not raise exception', function(){
-        expect(UsersRedis.remove,'bob',function(){}).not.toThrow();
+        expect( function() {
+          UsersRedis.remove('bob',function(){});
+        }).not.toThrow();
       });
     });
   });

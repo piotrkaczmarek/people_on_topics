@@ -8,7 +8,6 @@ function UsersRedis(redis) {
     console.log('Error: UsersRedis constructor called without "new" operator');
     return new Error('Error: UsersRedis constructor called without "new" operator');
   }
-
   this.get_unique_name = function(user_name, callback) {
     var times_checked = 0;
     var check_uniqueness = function(name, self) {
@@ -33,7 +32,15 @@ function UsersRedis(redis) {
       callback();
     });
   };
-
+  this.add = function(user, callback) {
+    var save_user = this.save;
+    this.get_unique_name(user.name, function(unique_name) {
+      user.name = unique_name;
+      save_user(user,function() {
+        callback(user);
+      });
+    });
+  };
   this.get = function(user_name, callback) {
     redis.hgetall('users:'+user_name, function(err,data) {
       if(err) throw err;
@@ -48,7 +55,7 @@ function UsersRedis(redis) {
           user.sex = data.sex;
         }
       } 
-      callback(err,user);
+      callback(user);
     });
   };
   this.remove = function(user_name, callback) {
@@ -67,7 +74,7 @@ function UsersRedis(redis) {
         return callback([]);
       }
       names.forEach(function(name) {
-        get_user(name, function(err, user) {
+        get_user(name, function(user) {
           users[name] = user;
           if(Object.keys(users).length === names.length) {
             callback(users);

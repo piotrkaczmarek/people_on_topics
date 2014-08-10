@@ -13,13 +13,10 @@ function SessionHander (redis) {
     var validation = UserValidator.validate(user);
 
     if(validation.valid) {
-      users.get_unique_name(user.name, function(unique_name) {
-        user.name = unique_name;
-        users.save(user,function() {
-          validation.user_name = user.name;
-          validation.token = Jwt.sign(user, 'secret');
-          return res.send(validation);
-        });
+      users.add(user, function(data) {
+        validation.user_name = data.name;
+        validation.token = Jwt.sign(data, 'secret');
+        return.send(validation);
       });
     } else {
       return res.send(validation);
