@@ -13,6 +13,7 @@
     "test_karma": "(cd tests && karma start)",
     "test_e2e": "node app/server/app.js -p 8000 & ./node_modules/protractor-multi/bin/protractor-multi tests/protractor-multi_conf.js; kill $!",
     "test_e2e_debug": "./node_modules/protractor-multi/bin/protractor-multi --debug=5859 tests/protractor-multi_conf.js",
+    "es": "sudo service elasticsearch start"
   },
   "author": "Piotr Kaczmarek",
   "license": "BSD-2-Clause",
@@ -25,7 +26,8 @@
     "redis": "~0.11.0",
     "socket.io": "~1.0.6",
     "socketio-jwt": "~2.3.4",
-    "minimist": "~0.2.0"
+    "minimist": "~0.2.0",
+    "elasticsearch": "~2.4.0"
   },
   "devDependencies": {
     "karma-jasmine": "~0.1.5",
