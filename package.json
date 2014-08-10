@@ -12,7 +12,7 @@
     "test_unit_debug": "node debug node_modules/jasmine-node/lib/jasmine-node/cli.js tests/ --captureExceptions --forceexit",
     "test_karma": "(cd tests && karma start)",
     "test_e2e": "node app/server/app.js -p 8000 & ./node_modules/protractor-multi/bin/protractor-multi tests/protractor-multi_conf.js; kill $!",
-    "test_e2e_debug": "node app/server/app.js -p 8000 & ./node_modules/protractor-multi/bin/protractor-multi debug tests/protractor-multi_conf.js; kill $!"
+    "test_e2e_debug": "./node_modules/protractor-multi/bin/protractor-multi --debug=5859 tests/protractor-multi_conf.js",
   },
   "author": "Piotr Kaczmarek",
   "license": "BSD-2-Clause",
