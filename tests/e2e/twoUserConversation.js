@@ -4,7 +4,7 @@ describe('twoUserConversation', function () {
   var redis = require('redis').createClient();
 
   var log_in = function(browser, name) {
-    browser.get('http://localhost:8080');
+    browser.get('http://localhost:8000');
     browser.element(by.model('current_user.name')).sendKeys(name);
     browser.element(by.model('current_user.age')).sendKeys('20');
     browser.element(by.id('start_button')).click();
