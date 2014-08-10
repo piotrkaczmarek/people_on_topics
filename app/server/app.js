@@ -29,7 +29,7 @@
     app.use(express.static(path.resolve('./app/client')));
   });
 
-  routes(app, redisPublisher);
+  routes(app, usersRedis);
   socketController(redisPublisher, io, socketIoJwt);
   socketRedisCoordinator(redisSubscriber, usersRedis, io);
 

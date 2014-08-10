@@ -1,19 +1,17 @@
 
 
-function SessionHander (redis) {
+function SessionHander (usersDAO) {
   'use strict';
+  var UserValidator = require('../lib/userValidator'),
+    Jwt = require('jsonwebtoken');
 
   this.handleSignIn = function(req, res, next) {
-    var UserValidator = require('../lib/userValidator'),
-      Jwt = require('jsonwebtoken'),
-      UsersRedis = require('../usersRedis').UsersRedis,
-      users = new UsersRedis(redis);
 
     var user = req.body;   
     var validation = UserValidator.validate(user);
 
     if(validation.valid) {
-      users.add(user, function(data) {
+      usersDAO.add(user, function(data) {
         validation.user_name = data.name;
         validation.token = Jwt.sign(data, 'secret');
         return.send(validation);

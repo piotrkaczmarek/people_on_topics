@@ -5,11 +5,11 @@
       SessionHander = require('./session'),
       UsersHandler = require('./users');
 
-  module.exports = exports = function(app,redis) {
+  module.exports = exports = function(app,usersDAO) {
 
     var contentHandler = new ContentHandler();
-    var sessionHandler = new SessionHander(redis);
-    var usersHandler = new UsersHandler(redis);
+    var sessionHandler = new SessionHander(usersDAO);
+    var usersHandler = new UsersHandler(usersDAO);
 
     app.get('/', contentHandler.displayMainPage);
     app.get('/users', usersHandler.handleGetUserList);
