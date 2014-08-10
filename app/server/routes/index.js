@@ -5,10 +5,10 @@
       SessionHander = require('./session'),
       UsersHandler = require('./users');
 
-  module.exports = exports = function(app,usersDAO) {
+  module.exports = exports = function(app,usersDAO,socket_url) {
 
     var contentHandler = new ContentHandler();
-    var sessionHandler = new SessionHander(usersDAO);
+    var sessionHandler = new SessionHander(usersDAO, socket_url);
     var usersHandler = new UsersHandler(usersDAO);
 
     app.get('/', contentHandler.displayMainPage);

@@ -20,6 +20,8 @@
   if(argv.p) {
     port = argv.p;
   }
+  var socket_url = 'http://localhost:'+port; 
+
 
   app.use(express.bodyParser());
 
@@ -29,7 +31,7 @@
     app.use(express.static(path.resolve('./app/client')));
   });
 
-  routes(app, usersRedis);
+  routes(app, usersRedis,socket_url);
   socketController(redisPublisher, io, socketIoJwt);
   socketRedisCoordinator(redisSubscriber, usersRedis, io);
 

@@ -1,7 +1,7 @@
 app.factory('socketFactory', function($rootScope) {
   var _socket;
-  var _connect = function(token, callback) {
-    _socket = io.connect('http://0.0.0.0:8080', {
+  var _connect = function(socket_url,token, callback) {
+    _socket = io.connect(socket_url, {
       'query': 'token='+token
     }).on('connect', function() {
       console.log('Socket authenticated');
