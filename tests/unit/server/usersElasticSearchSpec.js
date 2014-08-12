@@ -97,7 +97,7 @@ describe('usersElasticSearch', function() {
       });
     });
   });
-  describe('.get_users_scores', function() {
+  describe('.get_users_by_topics', function() {
     var users = { 
       'bob':{
         name: 'bob',
@@ -129,7 +129,7 @@ describe('usersElasticSearch', function() {
       }
     });
     it('should return only queried users', function(done) {
-      usersES.get_users_scores(['susan'],['topic3'], function(users) {
+      usersES.get_users_by_topics(['susan'],['topic3'], function(users) {
         expect(users.bob).not.toBeDefined();
         expect(users.george).not.toBeDefined();
         expect(users.susan).toBeDefined();
@@ -137,13 +137,13 @@ describe('usersElasticSearch', function() {
       });
     });
     it('he should get the same score as when getting the whole list', function(done) {
-      usersES.get_users_scores(['bob'],['topic1', 'topic2'], function(users) {
+      usersES.get_users_by_topics(['bob'],['topic1', 'topic2'], function(users) {
         expect(users.bob.score).toEqual(0.2712221);
         done();
       });
     });
     it('he should get the same score as when getting the whole list', function(done) {
-      usersES.get_users_scores(['susan'],['topic1', 'topic2'], function(users) {
+      usersES.get_users_by_topics(['susan'],['topic1', 'topic2'], function(users) {
         expect(users.susan.score).toEqual(0.028130025);
         done();
       });

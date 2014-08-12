@@ -41,7 +41,7 @@ function UsersElasticSearch(db) {
       callback(make_users_object(response));
     });
   };
-  this.get_users_scores = function(usernames, topics, callback) {
+  this.get_users_by_topics = function(usernames, topics, callback) {
     var body = {
       query: {
         filtered: {
