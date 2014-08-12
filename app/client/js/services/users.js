@@ -1,7 +1,7 @@
 app.factory('usersFactory', function($http, $rootScope) {
   var _users = {};
-  var _getUsers = function(callback) {
-    $http.get('/users').success(function(data) {
+  var _getUsers = function(topics, callback) {
+    $http({method: 'GET', url:'/users',params: {topics: topics}}).success(function(data) {
       for(var key in data) {
         _users[key] = data[key];
       }

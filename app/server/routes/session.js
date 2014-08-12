@@ -7,8 +7,8 @@ function SessionHander (usersDAO, socket_url) {
 
   this.handleSignIn = function(req, res, next) {
 
-    var user = req.body;   
-    var topics = []; //empty placeholder for now
+    var user = req.body.user;   
+    var topics = req.body.topics;
     var validation = UserValidator.validate(user);
 
     if(validation.valid) {

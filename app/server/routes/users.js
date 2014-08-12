@@ -2,7 +2,8 @@ function UsersHandler (usersDAO) {
   'use strict';
 
   this.handleGetUserList = function(req, res, next) {
-    usersDAO.get_all_online(function(users) {
+    var topics = [].concat(req.query.topics);
+    usersDAO.get_all_users_by_topics(topics,function(users) {
       return res.send(users);
     });
   };
