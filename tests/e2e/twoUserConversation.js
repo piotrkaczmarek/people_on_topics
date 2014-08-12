@@ -1,4 +1,5 @@
 describe('twoUserConversation', function () {
+  var log_in = require('./common').log_in;
   var browserOne = protractors[0].browser;
   var browserTwo = protractors[1].browser;
   var redis = require('redis').createClient();
@@ -7,33 +8,18 @@ describe('twoUserConversation', function () {
     host: 'localhost:9200'
   });
 
-  var log_in = function(browser, name) {
-    browser.get('http://localhost:8000');
-    browser.element(by.model('current_user.name')).sendKeys(name);
-    browser.element(by.model('current_user.age')).sendKeys('20');
-    browser.element(by.id('start_button')).click();
-  }
   beforeEach(function() {
     esClient.deleteByQuery({index: 'users', body: {query: {match_all: {}}}});
     redis.flushall();
   });
   describe('when both users log in', function() {
-    var users = ['Bob', 'Susan'];
     beforeEach(function() {
-      log_in(browserOne, users[0]);
-      log_in(browserTwo, users[1]);
+      log_in(browserOne, 'Bob', ['sports']);
+      log_in(browserTwo, 'Susan', ['sports']);
     });
-    describe('when Bob leaves', function() {
-      beforeEach(function() {
-        redis.publish('leaves', 'Bob');
-      });
-      it('Susan should not see him', function() {
-        expect(browserOne.element.all(by.css('.user_button')).count()).toEqual(1);
-      });
-    })
     describe('when Bob talks to Susan', function() {
       beforeEach(function() {
-        browserOne.element(by.id('Susan_open_message_box')).click();
+        browserOne.element(by.id('Susan_open_message_box_btn')).click();
         browserOne.element(by.id('Susan_msg')).sendKeys('Hi Susan');
         browserOne.element(by.css('.send_button')).click();
       });
