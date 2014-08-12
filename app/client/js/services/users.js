@@ -1,4 +1,4 @@
-app.factory('usersFactory', function($http, $rootScope) {
+app.factory('usersFactory', function($http, $rootScope, userTopicsFactory) {
   var _users = {};
   var _getUsers = function(topics, callback) {
     $http({method: 'GET', url:'/users',params: {topics: topics}}).success(function(data) {
@@ -20,7 +20,9 @@ app.factory('usersFactory', function($http, $rootScope) {
 
   $rootScope.$on('joins', function(event, data) {
     var user = JSON.parse(data);
-    _addUser(user);
+    if(userTopicsFactory.matches(user.topics)) {
+      _addUser(user);
+    }
   });
 
   $rootScope.$on('leaves', function(event, data) {
