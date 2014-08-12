@@ -1,6 +1,6 @@
 <h2>Your topics:</h2>
-<div class='topic_tag' ng-repeat='(topic_name, topic_value) in topics'>
-  {{topic_name}}
+<div class='topic_tag' ng-repeat='topic in topics'>
+  {{topic}}
 </div>
 <form name='userTopicsForm'>
   <input ng-model='new_topic' type='text' placeholder='What you want to talk about...'/>
