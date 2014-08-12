@@ -31,7 +31,7 @@ describe('usersElasticSearch', function() {
         };
       it('should save user', function(done) {
         usersES.save(users.bob,topics,function() {
-          usersES.get_all_online(function(data) {
+          usersES.get_all_users(function(data) {
             expect(data).toEqual(data);
             done();
           });
@@ -39,10 +39,120 @@ describe('usersElasticSearch', function() {
       });
     });
   });
-  describe('.get_all_online', function() {
+  describe('.get_all_users_by_topics', function() {
+    describe('when there are two topics queried', function() {
+      describe('and there two users who have these topics', function() {
+        var users = { 
+          'bob':{
+            name: 'bob',
+            age: 17,
+            sex: 'male'
+          },
+          'susan': {
+            name: 'susan',
+            age: 19
+          },
+          'george': {
+            name: 'george'
+          }
+        };
+        var topics = {
+          'bob': ['topic1', 'topic2'],
+          'susan': ['topic1', 'topic3'],
+          'george': ['topic3']
+        };
+        beforeEach(function(done) {
+          var users_ready = 0;
+          for(key in users) {
+            add_user(users[key],topics[key], function() {        
+              users_ready += 1;
+              if(users_ready >= Object.keys(users).length ) {
+                done();
+              }
+            });
+          }
+        });
+        it('should return only users that have these topics', function(done) {
+          usersES.get_all_users_by_topics(['topic1', 'topic2'], function(data) {
+            expect(data.susan).toBeDefined();
+            expect(data.bob).toBeDefined();
+            expect(data.george).not.toBeDefined();
+            done();
+          });
+        });
+        it('should give higher score for those who match more topics', function(done) {
+          usersES.get_all_users_by_topics(['topic1', 'topic2'], function(data) {
+            expect(data.bob.score).toBeGreaterThan(data.susan.score);
+            done();
+          });
+        });
+      });
+      describe('and there are no users who have these topics', function() {
+        it('should return empty object', function(done) {
+          usersES.get_all_users_by_topics(['topic1'], function(data) {
+            expect(data).toEqual({});
+            done();
+          });
+        });
+      });
+    });
+  });
+  describe('.get_users_scores', function() {
+    var users = { 
+      'bob':{
+        name: 'bob',
+        age: 17,
+        sex: 'male'
+      },
+      'susan': {
+        name: 'susan',
+        age: 19
+      },
+      'george': {
+        name: 'george'
+      }
+    };
+    var topics = {
+      'bob': ['topic1', 'topic2'],
+      'susan': ['topic1', 'topic3'],
+      'george': ['topic3']
+    };
+    beforeEach(function(done) {
+      var users_ready = 0;
+      for(key in users) {
+        add_user(users[key],topics[key], function() {        
+          users_ready += 1;
+          if(users_ready >= Object.keys(users).length ) {
+            done();
+          }
+        });
+      }
+    });
+    it('should return only queried users', function(done) {
+      usersES.get_users_scores(['susan'],['topic3'], function(users) {
+        expect(users.bob).not.toBeDefined();
+        expect(users.george).not.toBeDefined();
+        expect(users.susan).toBeDefined();
+        done();
+      });
+    });
+    it('he should get the same score as when getting the whole list', function(done) {
+      usersES.get_users_scores(['bob'],['topic1', 'topic2'], function(users) {
+        expect(users.bob.score).toEqual(0.2712221);
+        done();
+      });
+    });
+    it('he should get the same score as when getting the whole list', function(done) {
+      usersES.get_users_scores(['susan'],['topic1', 'topic2'], function(users) {
+        expect(users.susan.score).toEqual(0.028130025);
+        done();
+      });
+    });
+  });
+  describe('.get_all_users', function() {
     describe('when there is no user found', function() {
       it('should return no users', function(done) {
-        usersES.get_all_online(function(data) {
+        usersES.get_all_users(function(data) {
           expect(data).toEqual({});
           done();
         });
@@ -72,7 +182,7 @@ describe('usersElasticSearch', function() {
         }
       });
       it('should return both users', function(done) {
-        usersES.get_all_online(function(data) {
+        usersES.get_all_users(function(data) {
           expect(data).toEqual(users);
           done();
         });
@@ -106,7 +216,7 @@ describe('usersElasticSearch', function() {
       it('should remove given user', function(done) {
         usersES.remove('bob', function() {
           client.indices.refresh({index:'users'}, function() {
-            usersES.get_all_online(function(data) {
+            usersES.get_all_users(function(data) {
               var expected_users = {};
               expected_users.susan = users.susan;
               expect(data).toEqual(expected_users);
@@ -142,7 +252,7 @@ describe('usersElasticSearch', function() {
       it('should not remove any user', function(done) {
         usersES.remove('tom', function() {
           client.indices.refresh({index:'users'}, function() {
-            usersES.get_all_online(function(data) {
+            usersES.get_all_users(function(data) {
               var expected_users = {};
               expected_users.susan = users.susan;
               expect(data).toEqual(users);
@@ -199,11 +309,11 @@ describe('usersElasticSearch', function() {
         })
       });
       it('should return user with updated name', function(done) {
-        usersES.get_all_online(function(users_before_adding) {
+        usersES.get_all_users(function(users_before_adding) {
           expect(users_before_adding).toEqual({'bob': user});
           usersES.add(user_2, topics, function() {
             client.indices.refresh({index: 'users'}, function() {
-              usersES.get_all_online(function(users_after_adding) {
+              usersES.get_all_users(function(users_after_adding) {
                 expect(users_after_adding).toEqual({'bob': user, 'bob_1': user_2});
                 done();
               });
@@ -211,14 +321,14 @@ describe('usersElasticSearch', function() {
           });
         });
       });
-      // it('should save the user with unique name', function(done) {
-      //   usersES.add(user_2, topics,function(saved_user) {
-      //     usersES.get(saved_user.name,function(returned_user) {
-      //       expect(returned_user).toEqual(saved_user)
-      //       done();
-      //     });
-      //   });
-      // });
+      it('should save the user with unique name', function(done) {
+        usersES.add(user_2, topics,function(saved_user) {
+          usersES.get(saved_user.name,function(returned_user) {
+            expect(returned_user).toEqual(saved_user)
+            done();
+          });
+        });
+      });
     });
   });
   describe('.get', function() {

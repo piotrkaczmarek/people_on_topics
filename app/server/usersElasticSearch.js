@@ -6,6 +6,71 @@ function UsersElasticSearch(db) {
     return new Error('Error: UsersElasticSearch constructor called without "new" operator');
   }
 
+  var topics_query = function(topics) {
+    var body = {
+      query: {      
+        bool: {
+          should : [],
+          minimum_should_match: 1
+        }
+      }
+    };
+    topics.forEach(function(element) {
+      var term = {
+        term: {
+          topics: element
+        }
+      };
+      body.query.bool.should.push(term);
+    });
+    return body;
+  };
+  var make_users_object = function(response) {
+    var users = {};
+    for(var i = 0; i < response.hits.total; i++) {
+      var user = response.hits.hits[i]._source;
+      user.score = response.hits.hits[i]._score;
+      users[user.name] = user;
+    }
+    return users;
+  };
+  
+  this.get_all_users_by_topics = function(topics, callback) {
+    db.search({index: 'users', type: 'user', body: topics_query(topics)}, function(err, response) {
+      if(err) throw err;
+      callback(make_users_object(response));
+    });
+  };
+  this.get_users_scores = function(usernames, topics, callback) {
+    var body = {
+      query: {
+        filtered: {
+          query: topics_query(topics).query,
+          filter: {
+            ids: {
+              values: usernames
+            }
+          }
+        }
+      }
+    };
+    db.search({index: 'users', type: 'user', body: body}, function(err, response) {
+      if(err) throw err;
+      callback(make_users_object(response));
+    });
+  };
+  this.get_all_users = function(callback) {
+    db.search({index: 'users', type:'user'}, function(err,response) {
+      if(err) throw err;
+      var users = {};
+
+      for(var i = 0; i < response.hits.total; i++) {
+        var user = response.hits.hits[i]._source;
+        users[user.name] = user;
+      }
+      callback(users);
+    });
+  };
   this.add = function(user,topics, callback) {
     var save_user = this.save;
     var times_checked = 0;
@@ -35,18 +100,6 @@ function UsersElasticSearch(db) {
     doc.id = user.name;
     db.index(doc, function(err,response) {
       callback(err,response);
-    });
-  };
-  this.get_all_online = function(callback) {
-    db.search({index: 'users', type:'user'}, function(err,response) {
-      if(err) throw err;
-      var users = {};
-
-      for(var i = 0; i < response.hits.hits.length; i++) {
-        var user = response.hits.hits[i]._source;
-        users[user.name] = user;
-      }
-      callback(users);
     });
   };
   this.remove = function(user_name, callback) {
