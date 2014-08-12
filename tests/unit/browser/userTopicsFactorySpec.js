@@ -41,5 +41,34 @@ describe('userTopicsFactory', function() {
       });
     });
   });
+  describe('.matches', function() {
+    describe('when all topics match', function() {
+      beforeEach(function() {
+        factory.add_topic('topic1');
+        factory.add_topic('topic2');
+      });
+      it('should return true', function() {
+        expect(factory.matches(['topic1', 'topic2'])).toEqual(true);
+      });
+    });
+    describe('when not all topics match', function() {
+      beforeEach(function() {
+        factory.add_topic('topic1');
+        factory.add_topic('topic2');
+      });
+      it('should return true', function() {
+        expect(factory.matches(['topic5', 'topic2'])).toEqual(true);
+      });
+    });
+    describe('when no topic matches', function() {
+      beforeEach(function() {
+        factory.add_topic('topic1');
+        factory.add_topic('topic2');
+      });
+      it('should return false', function() {
+        expect(factory.matches(['topic5', 'topic4'])).toEqual(false);
+      });
+    });
+  });
 
 });

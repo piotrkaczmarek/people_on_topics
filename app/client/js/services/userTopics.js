@@ -22,8 +22,19 @@ app.factory('userTopicsFactory', function() {
       _topics.push(topic);
     }
   };
+  var _matches = function(topics) {
+    for(var i = 0; i < _topics.length; i++) {
+      for(var j = 0; j < topics.length; j++) {
+        if(_topics[i] === topics[j]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
   return {
     topics: _topics,
-    add_topic: _add_topic
+    add_topic: _add_topic,
+    matches: _matches
   };
 });
