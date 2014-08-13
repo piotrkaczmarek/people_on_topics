@@ -1,4 +1,5 @@
 function UsersElasticSearch(db) {
+  var async = require('async');
     /* If this constructor is called without the "new" operator, "this" points
    * to the global object. Log a warning and call it correctly. */
   if(false === (this instanceof UsersElasticSearch)) {
@@ -25,19 +26,22 @@ function UsersElasticSearch(db) {
     });
     return body;
   };
-  var make_users_array = function(response) {
+  var make_users_array = function(response, callback) {
     var users = [];
-    for(var i = 0; i < response.hits.total; i++) {
-      var user = response.hits.hits[i]._source;
-      user.score = response.hits.hits[i]._score;
+    var iterator = function(item, cb) {
+      var user = item._source;
+      user.score = item._score;
       users.push(user);
-    }
-    return users;
+      cb();
+    };
+    async.each(response.hits.hits, iterator, function() {
+      callback(users);
+    });
   };
   this.get_all_users_by_topics = function(topics, callback) {
     db.search({index: 'users', type: 'user', body: topics_query(topics)}, function(err, response) {
       if(err) throw err;
-      callback(make_users_array(response));
+      make_users_array(response,callback);
     });
   };
   this.get_users_by_topics = function(usernames, topics, callback) {
@@ -55,7 +59,7 @@ function UsersElasticSearch(db) {
     };
     db.search({index: 'users', type: 'user', body: body}, function(err, response) {
       if(err) throw err;
-      callback(make_users_array(response));
+      make_users_array(response,callback);
     });
   };
   this.add = function(user,topics, callback) {
