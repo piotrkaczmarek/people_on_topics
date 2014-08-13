@@ -1,23 +1,21 @@
 app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
   var _messageBoxes = {};
-  var _create = function(name) {
-    if(_messageBoxes[name]) {
+  var _create = function(user) {
+    if(_messageBoxes[user.name]) {
       return true;
     }
-    var user = usersFactory.users[name];
-    if(user) {
-      _messageBoxes[name] = { 
-        user: user,
-        messages: []
-      };
-      return true;
-    } else {
-      return false;
-    }
+    _messageBoxes[user.name] = { 
+      user: user,
+      messages: []
+    };
+    return true;
   };
   var _add_message = function(interlocutor, from, body) {
     if(!_messageBoxes[interlocutor]) {
-      if(!_create(interlocutor)) {
+      var user = usersFactory.getUser(interlocutor);
+      if(user) {
+        _create(user)
+      } else {
         return false;
       }
     }

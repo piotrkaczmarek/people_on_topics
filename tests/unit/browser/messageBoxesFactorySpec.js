@@ -21,37 +21,23 @@ describe('messageBoxesFactory', function() {
         });
       });
       it('should create new conversation', function() {
-        factory.create(user.name);
+        factory.create(user);
         var boxes = Object.keys(factory.messageBoxes);
         expect(boxes.length).toEqual(1);
       });
       it('should add user data to conversation', function() {
-        factory.create(user.name);
+        factory.create(user);
         expect(factory.messageBoxes[user.name].user).toEqual(user);
       });
       describe('when the conversation has already been started', function() {
         beforeEach(function() {
-          factory.create(user.name);
+          factory.create(user);
           factory.add_message(user.name,user.name, 'Hello!');
         });
         it('should not delete previous messages', function () {
-          factory.create(user.name);
+          factory.create(user);
           expect(factory.messageBoxes[user.name].messages).toEqual([{from: user.name, body: 'Hello!'}]);
         });
-      });
-    });
-    describe('when there is no such user', function() {
-      var factory;
-      beforeEach(function() {
-        module('peopleOnTopicsApp');
-        inject(function(messageBoxesFactory) {
-          factory = messageBoxesFactory;
-        });
-      });
-      it('should not open new message box', function() {
-        factory.create('Johnny');
-        var boxes = Object.keys(factory.messageBoxes);
-        expect(boxes.length).toEqual(0);
       });
     });
   });
@@ -76,7 +62,7 @@ describe('messageBoxesFactory', function() {
           inject(function(messageBoxesFactory) {
             factory = messageBoxesFactory;
           });
-          factory.create(user.name);
+          factory.create(user);
         });
         it('should append new message', function() {
           factory.add_message('Johnny','Johnny', 'Hello Bob!');
@@ -100,7 +86,9 @@ describe('messageBoxesFactory', function() {
                       }
           beforeEach(function() {
             var usersFactory = {
-              users: users
+              getUser: function(name) {
+                return users.Johnny;
+              }
             };
             module('peopleOnTopicsApp');
             module(function($provide) {
@@ -145,7 +133,7 @@ describe('messageBoxesFactory', function() {
           inject(function(messageBoxesFactory) {
             factory = messageBoxesFactory;
           });
-          factory.create(user.name);
+          factory.create(user);
         });
         it('should append new message', function() {
           factory.add_message('Johnny','Bob', 'Hello Johnny!');

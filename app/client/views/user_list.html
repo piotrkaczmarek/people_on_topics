@@ -1,8 +1,8 @@
 <h2>Others:</h2>
 <ul >
   <div class='user_button' ng-repeat='user in users'>
-    <div id='{{user.name}}_open_message_box_btn' class='btn btn-primary' ng-click='openMessageBox(user.name)' ng-hide='current_user.name === user.name'>
-      {{user.name}} {{user.age}} {{user.sex}}
+    <div id='{{user.name}}_open_message_box_btn' class='btn btn-primary' ng-click='openMessageBox(user)' ng-hide='current_user.name === user.name'>
+      {{user.name}} {{user.age}} {{user.sex}} {{user.score}}
     </div>
   </div>
 </ul>

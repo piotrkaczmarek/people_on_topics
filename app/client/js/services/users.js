@@ -1,26 +1,35 @@
 app.factory('usersFactory', function($http, $rootScope, userTopicsFactory) {
-  var _users = {};
+  var _users = [];
   var _getUsers = function(topics, callback) {
     $http({method: 'GET', url:'/users',params: {topics: topics}}).success(function(data) {
       for(var key in data) {
-        _users[key] = data[key];
+        _users.push(data[key]);
       }
       callback(_users);
     });
   };
   var _removeUser = function(name) {
-    delete _users[name];
+    for(var i = 0; i < _users.length; i++) {
+      if(_users[i].name === name) {
+        _users.splice(i,1);
+      }
+    }
   };
   var _addUser = function(user) {
-    if(user.name === undefined) {
-      throw new Error('Factory users.addUser got incomplete user object');
-    }
-   _users[user.name] = user;
+    _users.push(user);
   };
-
+  var _getUser = function(name) {
+    for(var i = 0; i < _users.length; i++) {
+      if(_users[i].name === name) {
+        return _users[i];
+      }
+    }
+    return false;
+  };
   $rootScope.$on('joins', function(event, data) {
     var user = JSON.parse(data);
     if(userTopicsFactory.matches(user.topics)) {
+      user.score = 0;
       _addUser(user);
     }
   });
@@ -33,6 +42,7 @@ app.factory('usersFactory', function($http, $rootScope, userTopicsFactory) {
     users: _users,
     getUsers: _getUsers,
     removeUser: _removeUser,
-    addUser: _addUser
+    addUser: _addUser,
+    getUser: _getUser
   };
 });

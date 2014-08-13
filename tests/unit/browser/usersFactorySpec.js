@@ -39,14 +39,14 @@ describe('usersFactory', function() {
       it('should return one user', function() {
         $httpBackend.when('GET','/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(data) {
-          expect(data).toEqual(users);
+          expect(data).toEqual([users.bob]);
         });
         $httpBackend.flush();
       });
       it('should update users data', function() {
         $httpBackend.when('GET', '/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(data) {
-          expect(factory.users).toEqual(users);
+          expect(factory.users).toEqual([users.bob]);
         });
         $httpBackend.flush();
       });
@@ -60,9 +60,7 @@ describe('usersFactory', function() {
     };
     it('should add a new user', function() {
       factory.addUser(new_user);
-      expected_users = {};
-      expected_users[new_user.name] = new_user;
-      expect(factory.users).toEqual(expected_users);
+      expect(factory.users).toEqual([new_user]);
     });
   });
   describe('.removeUser', function() {
@@ -91,7 +89,7 @@ describe('usersFactory', function() {
           factory.removeUser('bob');
           expected_users = {};
           expected_users[users.susan.name] = users.susan;
-          expect(factory.users).toEqual(expected_users)
+          expect(factory.users).toEqual([users.susan])
         });
         $httpBackend.flush();
       });
@@ -101,7 +99,7 @@ describe('usersFactory', function() {
         $httpBackend.when('GET', '/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(data) {
           factory.removeUser('juliet');
-          expect(factory.users).toEqual(users)
+          expect(factory.users).toEqual([users.bob,users.susan]);
         });
         $httpBackend.flush();
       });
@@ -116,6 +114,26 @@ describe('usersFactory', function() {
       it('should return empty object', function() {
         factory.removeUser('john');
         expect(factory.users).toEqual({});
+      });
+    });
+  });
+  describe('.getUser', function() {
+    describe('when user is on the list', function() {
+      beforeEach(function() {
+        factory.addUser({name: 'bob', age: 20});
+        factory.addUser({name: 'susan'});
+      });
+      it('should find user', function() {
+        expect(factory.getUser('bob')).toEqual({name: 'bob', age: 20});
+      });
+    });
+    describe('when user is not on the list', function() {
+      beforeEach(function() {
+        factory.addUser({name: 'bob', age: 20});
+        factory.addUser({name: 'susan'});
+      });
+      it('should return false', function() {
+        expect(factory.getUser('john')).toEqual(false);
       });
     });
   });
