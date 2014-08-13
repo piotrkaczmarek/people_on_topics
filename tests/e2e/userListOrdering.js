@@ -22,8 +22,14 @@ describe('userListOrdering', function() {
     });
     it('they should see each other ordered by common interests', function() {
       browserThree.element.all(by.css('.user_button')).then(function(elements) {
-        expect(elements[1].getText()).toContain('Claudia');
-        expect(elements[2].getText()).toContain('Bob');
+        if(elements.length === 3) {
+          expected_order = ['', 'Claudia', 'Bob'];
+        } else {
+          expected_order = ['Claudia', 'Bob'];
+        }
+        for(var i = 0 ; i < elements.length; i++) {
+          expect(elements[i].getText()).toContain(expected_order[i]);
+        }
       });
     });
   });
