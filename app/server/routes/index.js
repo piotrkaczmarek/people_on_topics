@@ -13,6 +13,7 @@
 
     app.get('/', contentHandler.displayMainPage);
     app.get('/users', usersHandler.handleGetUserList);
+    app.get('/users/few', usersHandler.handleGetPartialUserList);
     app.post('/sign_in', sessionHandler.handleSignIn);
 
   };
