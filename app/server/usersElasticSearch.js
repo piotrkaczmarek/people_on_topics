@@ -58,18 +58,6 @@ function UsersElasticSearch(db) {
       callback(make_users_array(response));
     });
   };
-  this.get_all_users = function(callback) {
-    db.search({index: 'users', type:'user'}, function(err,response) {
-      if(err) throw err;
-      var users = {};
-
-      for(var i = 0; i < response.hits.total; i++) {
-        var user = response.hits.hits[i]._source;
-        users[user.name] = user;
-      }
-      callback(users);
-    });
-  };
   this.add = function(user,topics, callback) {
     var save_user = this.save;
     var times_checked = 0;

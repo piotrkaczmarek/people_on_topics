@@ -22,18 +22,19 @@ describe('usersElasticSearch', function() {
   });
   describe('.save', function() {
     describe('when user is passed with topics', function() {
-      var users = {
-          'bob':{
-            name: 'bob',
-            age: 17,
-            sex: 'male'
-          }
-        };
+      var user = {
+        name: 'bob',
+        age: 17,
+        sex: 'male'
+      };
       it('should save user', function(done) {
-        usersES.save(users.bob,topics,function() {
-          usersES.get_all_users(function(data) {
-            expect(data).toEqual(data);
-            done();
+        usersES.save(user,topics,function() {
+          client.indices.refresh({index: 'users'}, function() {
+            client.search({index: 'users', type:'user'}, function(err,response) {
+              expect(response.hits.total).toEqual(1);
+              expect(response.hits.hits[0]._source).toEqual(user);
+              done();
+            });
           });
         });
       });
@@ -163,46 +164,6 @@ describe('usersElasticSearch', function() {
       });
     });
   });
-  describe('.get_all_users', function() {
-    describe('when there is no user found', function() {
-      it('should return no users', function(done) {
-        usersES.get_all_users(function(data) {
-          expect(data).toEqual({});
-          done();
-        });
-      });
-    });
-    describe('when there are two users online', function() {
-      var users = { 
-        'bob':{
-          name: 'bob',
-          age: 17,
-          sex: 'male'
-        },
-        'susan': {
-          name: 'susan',
-          age: 19
-        }
-      };
-      beforeEach(function(done) {
-        var users_ready = 0;
-        for(key in users) {
-          add_user(users[key],topics, function() {        
-            users_ready += 1;
-            if(users_ready >= Object.keys(users).length ) {
-              done();
-            }
-          });
-        }
-      });
-      it('should return both users', function(done) {
-        usersES.get_all_users(function(data) {
-          expect(data).toEqual(users);
-          done();
-        });
-      });
-    });
-  });
   describe('.remove', function() {
     describe('when there are two users online', function() {
       var users = { 
@@ -230,10 +191,9 @@ describe('usersElasticSearch', function() {
       it('should remove given user', function(done) {
         usersES.remove('bob', function() {
           client.indices.refresh({index:'users'}, function() {
-            usersES.get_all_users(function(data) {
-              var expected_users = {};
-              expected_users.susan = users.susan;
-              expect(data).toEqual(expected_users);
+            client.search({index: 'users', type:'user'}, function(err,response) {
+              expect(response.hits.total).toEqual(1);
+              expect(response.hits.hits[0]._source).toEqual(users.susan);
               done();
             });
           });
@@ -266,10 +226,8 @@ describe('usersElasticSearch', function() {
       it('should not remove any user', function(done) {
         usersES.remove('tom', function() {
           client.indices.refresh({index:'users'}, function() {
-            usersES.get_all_users(function(data) {
-              var expected_users = {};
-              expected_users.susan = users.susan;
-              expect(data).toEqual(users);
+            client.search({index: 'users', type:'user'}, function(err,response) {
+              expect(response.hits.total).toEqual(2);
               done();
             });
           });
@@ -323,12 +281,17 @@ describe('usersElasticSearch', function() {
         })
       });
       it('should return user with updated name', function(done) {
-        usersES.get_all_users(function(users_before_adding) {
-          expect(users_before_adding).toEqual({'bob': user});
-          usersES.add(user_2, topics, function() {
+
+        client.search({index: 'users', type:'user'}, function(err,response) {
+          expect(response.hits.total).toEqual(1);
+          expect(response.hits.hits[0]._source).toEqual(user);
+          usersES.add(user_2,topics, function() {
             client.indices.refresh({index: 'users'}, function() {
-              usersES.get_all_users(function(users_after_adding) {
-                expect(users_after_adding).toEqual({'bob': user, 'bob_1': user_2});
+              client.search({index: 'users', type:'user'},function(err,response) {
+                expect(response.hits.total).toEqual(2);
+                expect(response.hits.hits[0]._source).toEqual(user);
+                user_2.name = 'bob_1';
+                expect(response.hits.hits[1]._source).toEqual(user_2);
                 done();
               });
             });
