@@ -3,7 +3,7 @@ exports.config = {
   // Do not start a Selenium Standalone sever - only run this using chrome.
   chromeOnly: true,
   chromeDriver: '../node_modules/protractor-multi/selenium/chromedriver',
-  browsers: 2,
+  browsers: 3,
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
     'browserName': 'chrome'
