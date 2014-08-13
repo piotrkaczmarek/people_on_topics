@@ -18,13 +18,11 @@ app.factory('usersFactory', function($http, $rootScope, userTopicsFactory) {
   var _addUser = function(user) {
     _users.push(user);
   };
-  var _getUser = function(name) {
-    for(var i = 0; i < _users.length; i++) {
-      if(_users[i].name === name) {
-        return _users[i];
-      }
-    }
-    return false;
+  var _getUser = function(name, callback) {
+    var iterator = function(item, cb) {
+      cb(item.name === name);
+    };
+    async.detect(_users, iterator,callback);
   };
   $rootScope.$on('joins', function(event, data) {
     var user = JSON.parse(data);

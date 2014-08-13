@@ -124,7 +124,9 @@ describe('usersFactory', function() {
         factory.addUser({name: 'susan'});
       });
       it('should find user', function() {
-        expect(factory.getUser('bob')).toEqual({name: 'bob', age: 20});
+        factory.getUser('bob', function(data) {
+          expect(data).toEqual({name: 'bob', age: 20});
+        });
       });
     });
     describe('when user is not on the list', function() {
@@ -133,7 +135,9 @@ describe('usersFactory', function() {
         factory.addUser({name: 'susan'});
       });
       it('should return false', function() {
-        expect(factory.getUser('john')).toEqual(false);
+        factory.getUser('john', function(data) {
+          expect(data).toEqual(undefined);
+        });
       });
     });
   });
