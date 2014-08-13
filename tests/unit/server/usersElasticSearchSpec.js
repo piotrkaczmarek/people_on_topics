@@ -74,15 +74,21 @@ describe('usersElasticSearch', function() {
         });
         it('should return only users that have these topics', function(done) {
           usersES.get_all_users_by_topics(['topic1', 'topic2'], function(data) {
-            expect(data.susan).toBeDefined();
-            expect(data.bob).toBeDefined();
-            expect(data.george).not.toBeDefined();
+            expect(data.length).toEqual(2);
             done();
           });
         });
         it('should give higher score for those who match more topics', function(done) {
           usersES.get_all_users_by_topics(['topic1', 'topic2'], function(data) {
-            expect(data.bob.score).toBeGreaterThan(data.susan.score);
+            for(var i = 0; i < data.length; i++) {
+              if(data[i].name === 'bob'){
+                var bob_score = data[i].score;
+              }
+              if(data[i].name === 'susan') {
+                var susan_score = data[i].score;
+              }
+            }
+            expect(bob_score).toBeGreaterThan(susan_score);
             done();
           });
         });
@@ -129,22 +135,30 @@ describe('usersElasticSearch', function() {
       }
     });
     it('should return only queried users', function(done) {
-      usersES.get_users_by_topics(['susan'],['topic3'], function(users) {
-        expect(users.bob).not.toBeDefined();
-        expect(users.george).not.toBeDefined();
-        expect(users.susan).toBeDefined();
+      usersES.get_users_by_topics(['susan'],['topic3'], function(data) {
+        expect(data.length).toEqual(1);
         done();
       });
     });
     it('he should get the same score as when getting the whole list', function(done) {
-      usersES.get_users_by_topics(['bob'],['topic1', 'topic2'], function(users) {
-        expect(users.bob.score).toEqual(0.2712221);
+      usersES.get_users_by_topics(['bob'],['topic1', 'topic2'], function(data) {
+        for(var i = 0; i < data.length; i++) {
+          if(data[i].name === 'bob') {
+            var bob_score = data[i].score;
+          }
+        }
+        expect(bob_score).toEqual(0.2712221);
         done();
       });
     });
     it('he should get the same score as when getting the whole list', function(done) {
-      usersES.get_users_by_topics(['susan'],['topic1', 'topic2'], function(users) {
-        expect(users.susan.score).toEqual(0.028130025);
+      usersES.get_users_by_topics(['susan'],['topic1', 'topic2'], function(data) {
+        for(var i = 0; i < data.length; i++) {
+          if(data[i].name === 'susan') {
+            var susan_score = data[i].score;
+          }
+        }
+        expect(susan_score).toEqual(0.028130025);
         done();
       });
     });

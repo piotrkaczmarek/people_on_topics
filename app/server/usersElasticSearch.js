@@ -25,20 +25,19 @@ function UsersElasticSearch(db) {
     });
     return body;
   };
-  var make_users_object = function(response) {
-    var users = {};
+  var make_users_array = function(response) {
+    var users = [];
     for(var i = 0; i < response.hits.total; i++) {
       var user = response.hits.hits[i]._source;
       user.score = response.hits.hits[i]._score;
-      users[user.name] = user;
+      users.push(user);
     }
     return users;
   };
-  
   this.get_all_users_by_topics = function(topics, callback) {
     db.search({index: 'users', type: 'user', body: topics_query(topics)}, function(err, response) {
       if(err) throw err;
-      callback(make_users_object(response));
+      callback(make_users_array(response));
     });
   };
   this.get_users_by_topics = function(usernames, topics, callback) {
@@ -56,7 +55,7 @@ function UsersElasticSearch(db) {
     };
     db.search({index: 'users', type: 'user', body: body}, function(err, response) {
       if(err) throw err;
-      callback(make_users_object(response));
+      callback(make_users_array(response));
     });
   };
   this.get_all_users = function(callback) {

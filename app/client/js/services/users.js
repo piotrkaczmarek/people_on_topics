@@ -3,10 +3,13 @@ app.factory('usersFactory', function($http, $rootScope, userTopicsFactory) {
   var _getUsers = function(topics, callback) {
     $http({method: 'GET', url:'/users',params: {topics: topics}}).success(function(data) {
       _users.length = 0;
-      for(var key in data) {
-        _users.push(data[key]);
-      }
-      callback(_users);
+      var iterator = function(item, cb) {
+        _users.push(item);
+        cb();
+      };
+      async.each(data,iterator, function() {
+        callback(_users);
+      });
     });
   };
   var _removeUser = function(name) {

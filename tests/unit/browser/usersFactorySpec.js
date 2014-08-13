@@ -25,12 +25,12 @@ describe('usersFactory', function() {
       $httpBackend.verifyNoOutstandingRequest();
     });
     describe('when there is one user', function() {
-      var users = {
-        bob: {
+      var users = [
+        {
           name: 'bob',
           age: 17
         }
-      };
+      ]
       it('should send request to server', function() {
         $httpBackend.expect('GET', '/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(){});
@@ -39,14 +39,14 @@ describe('usersFactory', function() {
       it('should return one user', function() {
         $httpBackend.when('GET','/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(data) {
-          expect(data).toEqual([users.bob]);
+          expect(data).toEqual(users);
         });
         $httpBackend.flush();
       });
       it('should update users data', function() {
         $httpBackend.when('GET', '/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(data) {
-          expect(factory.users).toEqual([users.bob]);
+          expect(factory.users).toEqual(users);
         });
         $httpBackend.flush();
       });
@@ -65,16 +65,16 @@ describe('usersFactory', function() {
   });
   describe('.removeUser', function() {
     var $httpBackend;
-    var users = {
-      bob: {
+    var users = [
+      {
         name: 'bob',
         age: 17
       },
-      susan: {
+      {
         name: 'susan',
         sex: 'female'
       }
-    };
+    ]
     beforeEach(inject(function($injector) {
       $httpBackend = $injector.get('$httpBackend');      
     }));
@@ -87,9 +87,7 @@ describe('usersFactory', function() {
         $httpBackend.when('GET', '/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(data) {
           factory.removeUser('bob');
-          expected_users = {};
-          expected_users[users.susan.name] = users.susan;
-          expect(factory.users).toEqual([users.susan])
+          expect(factory.users).toEqual([users[1]])
         });
         $httpBackend.flush();
       });
@@ -99,7 +97,7 @@ describe('usersFactory', function() {
         $httpBackend.when('GET', '/users?topics='+topics[0]).respond(users);
         factory.getUsers(topics, function(data) {
           factory.removeUser('juliet');
-          expect(factory.users).toEqual([users.bob,users.susan]);
+          expect(factory.users).toEqual(users);
         });
         $httpBackend.flush();
       });
