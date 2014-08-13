@@ -2,6 +2,7 @@ app.factory('usersFactory', function($http, $rootScope, userTopicsFactory) {
   var _users = [];
   var _getUsers = function(topics, callback) {
     $http({method: 'GET', url:'/users',params: {topics: topics}}).success(function(data) {
+      _users.length = 0;
       for(var key in data) {
         _users.push(data[key]);
       }
