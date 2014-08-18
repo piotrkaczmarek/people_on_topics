@@ -77,15 +77,15 @@ function UsersElasticSearch(db) {
           return cb(user);
         }
       });
-    }
+    };
     save_unique(save_unique, callback);
-  }
+  };
   this.save = function(user,topics,callback) {
     var doc = {
       index: 'users',
       type: 'user',
       op_type: 'create'
-    }
+    };
     user.topics = topics;
     doc.body = user;
     doc.id = user.name;
@@ -97,7 +97,7 @@ function UsersElasticSearch(db) {
     db.delete({index: 'users', type: 'user', id: user_name}, function(err,response) {
       if(err && err.message !== 'Not Found') throw err;
       callback();
-    })
+    });
   };
   this.get = function(user_name, callback) {
     db.get({index: 'users', type:'user', id: user_name}, function(err, response) {
