@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  module.exports = exports = function(redisSubscriber, usersRedis, io) {
+  module.exports = exports = function(redisSubscriber, usersDAO, io) {
 
     redisSubscriber.subscribe('joins', 'leaves', 'message_sent');
     
@@ -9,7 +9,7 @@
         io.sockets.emit('joins', message);
       };
       var remove_user = function(message) {
-        usersRedis.remove(message, function() {
+        usersDAO.remove(message, function() {
           console.log('Removed ',message);
           io.sockets.emit('leaves', message);
         });
