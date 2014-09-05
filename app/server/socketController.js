@@ -1,9 +1,9 @@
 (function() {
   'use strict';
-  module.exports = exports = function(redisPublisher, io, socketIoJwt) {
+  module.exports = exports = function(redisPublisher, io, socketIoJwt, token_secret) {
 
     io.use(socketIoJwt.authorize({
-      secret: 'secret',
+      secret: token_secret,
       handshake: true
     }));
     io.on('connection', function(socket) {

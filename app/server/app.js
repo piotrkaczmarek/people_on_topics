@@ -3,6 +3,7 @@
   var express = require('express'),
     app = express(),
     server = require('http').Server(app),
+    fs = require('fs'),
     path = require('path'),
     redis = require('redis'),
     routes = require('./routes'),
@@ -26,6 +27,7 @@
     port = argv.p;
   }
   var socket_url = 'http://localhost:'+port; 
+  var token_secret = fs.readFileSync(path.resolve('app/server/config/token.secret'));
 
 
   app.use(express.bodyParser());
@@ -36,8 +38,8 @@
     app.use(express.static(path.resolve('./app/client')));
   });
 
-  routes(app, usersDAO,socket_url);
-  socketController(redisPublisher, io, socketIoJwt);
+  routes(app, usersDAO,socket_url, token_secret);
+  socketController(redisPublisher, io, socketIoJwt, token_secret);
   socketRedisCoordinator(redisSubscriber, usersDAO, io);
 
   server.listen(port);
