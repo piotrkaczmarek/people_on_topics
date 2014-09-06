@@ -35,6 +35,9 @@ People on Topics is a chat app without the concept of chatrooms. Instead it lets
   ./node_modules/protractor-multi/bin/webdriver-manager update
 ````
 
+Put file 'token.secret' containing random long string to app/server/config directory.
+
+
 ##### elasticsearch (ubuntu):
   - https://gist.github.com/wingdspur/2026107
 
