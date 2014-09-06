@@ -22,10 +22,7 @@
   var usersDAO = new UsersElasticSearch(esClient);
         
   var argv = require('minimist')(process.argv.slice(2));
-  var port = 8080;
-  if(argv.p) {
-    port = argv.p;
-  }
+  var port =  argv.p || 8080;
   var socket_url = 'http://localhost:'+port; 
   var token_secret = fs.readFileSync(path.resolve('app/server/config/token.secret'));
 
