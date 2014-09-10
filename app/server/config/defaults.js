@@ -14,7 +14,7 @@ module.exports = {
     port: '9200'
   },
   redis: {
-    ip: redisURL.hostname,
+    host: redisURL.hostname,
     port: redisURL.port,
     password: redisPassword
   },
