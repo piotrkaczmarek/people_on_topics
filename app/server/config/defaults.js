@@ -17,5 +17,6 @@ module.exports = {
     ip: redisURL.hostname,
     port: redisURL.port,
     password: redisPassword
-  }
+  },
+  tokenSecret: process.env.TOKEN_SECRET || 'development_fallback_secret'
 }

@@ -2,7 +2,6 @@
   "use strict";
   var express = require('express'),
     http = require('http'),
-    fs = require('fs'),
     path = require('path'),
     redis = require('redis'),
     routes = require('./routes'),
@@ -23,7 +22,7 @@
 
       self.port =  argv.p || config.serverPort;
       self.socket_url = config.socketIp+':'+self.port;
-      self.token_secret = fs.readFileSync(path.resolve('app/server/config/token.secret'));
+      self.token_secret = config.tokenSecret;
       self.elasticsearch_host = config.elasticsearch.ip+':'+config.elasticsearch.port;
     };
     var setupDB = function() {
