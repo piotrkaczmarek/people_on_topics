@@ -6,6 +6,7 @@
     path = require('path'),
     redis = require('redis'),
     routes = require('./routes'),
+    config = require('./config/defaults'),
     socketController = require('./socketController'),
     socketio = require('socket.io'),
     socketIoJwt = require('socketio-jwt'),
@@ -18,12 +19,12 @@
     var self = this;
 
     var setupVariables = function() {
-      self.ipaddress = 'localhost';
       var argv = require('minimist')(process.argv.slice(2));
-      self.port =  argv.p || 8080;
-      self.socket_url = 'http://localhost:'+self.port; 
+
+      self.port =  argv.p || config.serverPort;
+      self.socket_url = config.socketIp+':'+self.port;
       self.token_secret = fs.readFileSync(path.resolve('app/server/config/token.secret'));
-      self.elasticsearch_host = 'localhost:9200';
+      self.elasticsearch_host = config.elasticsearch.ip+':'+config.elasticsearch.port;
     };
     var setupDB = function() {
       var esClient = elasticsearch.Client({
@@ -47,8 +48,16 @@
     };
     var setupSocket = function() {
       self.io = socketio.listen(self.server);
-      var redisPublisher = redis.createClient();
-      var redisSubscriber = redis.createClient();
+      var redisPublisher = redis.createClient(
+        config.redis.port,
+        config.redis.host, 
+        {auth_pass: config.redis.password}
+      );
+      var redisSubscriber = redis.createClient(
+        config.redis.port,
+        config.redis.host, 
+        {auth_pass: config.redis.password}
+      );
       socketController(redisPublisher, self.io, socketIoJwt, self.token_secret);
       socketRedisCoordinator(redisSubscriber, self.usersDAO, self.io);
     }
@@ -60,8 +69,8 @@
       setupSocket();
     };
     self.start = function() {
-      self.server.listen(self.port,self.ipaddress);
-      console.log('Express server listening on ',self.ipaddress,':',self.port);
+      self.server.listen(self.port);
+      console.log('Express server listening on port',self.port);
     };
   };
 
