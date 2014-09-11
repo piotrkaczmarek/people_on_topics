@@ -1,6 +1,8 @@
 People on Topics [WIP]
 ========================
-Showcase demo of scalable realtime application. Not production ready yet.
+http://peopleontopics.herokuapp.com/
+
+Showcase demo of scalable realtime application.
 ## Overview
 People on Topics is a chat app without the concept of chatrooms. Instead it lets users choose the only two important things when it comes to chatting with strangers:
 
