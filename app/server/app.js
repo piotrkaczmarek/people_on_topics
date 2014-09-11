@@ -23,7 +23,7 @@
       self.port =  argv.p || config.serverPort;
       self.socket_url = config.socketIp+':'+self.port;
       self.token_secret = config.tokenSecret;
-      self.elasticsearch_host = config.elasticsearch.ip+':'+config.elasticsearch.port;
+      self.elasticsearch_host = config.elasticsearchHost;
     };
     var setupDB = function() {
       var esClient = elasticsearch.Client({
