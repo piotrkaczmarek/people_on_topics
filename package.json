@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node app/server/app.js",
+    "postinstall": "node node_modules/bower/bin/bower install",
     "debug": "node debug app/server/app.js",
     "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --forceexit ; (cd tests && karma start --single-run); npm run test_e2e",
     "test_unit": "node node_modules/jasmine-node/lib/jasmine-node/cli.js tests/unit/server --captureExceptions --forceexit",
