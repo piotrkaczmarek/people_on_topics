@@ -8,7 +8,6 @@ if(process.env.REDISCLOUD_URL) {
 
 module.exports = {
   serverPort: process.env.PORT || 8080,
-  socketIp:'http://localhost',
   elasticsearchHost: process.env.BONSAI_URL || 'localhost:9200',
   redis: {
     host: redisURL.hostname,

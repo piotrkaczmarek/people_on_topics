@@ -1,6 +1,6 @@
 
 
-function SessionHander (usersDAO, socket_url, token_secret) {
+function SessionHander (usersDAO, token_secret) {
   'use strict';
   var UserValidator = require('../lib/userValidator'),
     Jwt = require('jsonwebtoken');
@@ -15,7 +15,6 @@ function SessionHander (usersDAO, socket_url, token_secret) {
       usersDAO.add(user, topics, function(data) {
         validation.user_name = data.name;
         validation.token = Jwt.sign(data, token_secret);
-        validation.socket_url = socket_url;
         return res.send(validation);
       });
     } else {

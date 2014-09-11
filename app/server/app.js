@@ -21,7 +21,6 @@
       var argv = require('minimist')(process.argv.slice(2));
 
       self.port =  argv.p || config.serverPort;
-      self.socket_url = config.socketIp+':'+self.port;
       self.token_secret = config.tokenSecret;
       self.elasticsearch_host = config.elasticsearchHost;
     };
@@ -43,7 +42,7 @@
       });
     };
     var setupRoutes = function() {
-      routes(self.expressApp, self.usersDAO,self.socket_url, self.token_secret);
+      routes(self.expressApp, self.usersDAO, self.token_secret);
     };
     var setupSocket = function() {
       self.io = socketio.listen(self.server);
