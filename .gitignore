@@ -12,6 +12,8 @@ pids
 logs
 results
 
+coverage
+
 npm-debug.log
 node_modules
 app/client/bower_components
