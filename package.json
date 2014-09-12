@@ -44,7 +44,6 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "protractor-multi": "bobthekingofegypt/protractor#8ac849a5225698efc260d6e26307bccfe9801693",
     "jasmine-node": "~1.14.5",
-    "angular-mocks": "~1.2.19",
     "grunt": "~0.4.5",
     "grunt-contrib-jshint": "~0.10.0"
   }

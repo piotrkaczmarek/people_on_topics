@@ -19,7 +19,7 @@ module.exports = function(config) {
     files: [
       '../app/client/bower_components/angular/angular.js',
       '../app/client/bower_components/async/lib/async.js',
-      '../node_modules/angular-mocks/angular-mocks.js',
+      '../app/client/bower_components/angular-mocks/angular-mocks.js',
       {pattern: '../app/client/js/*.js', included: true},
       {pattern: '../app/client/js/**/*.js', included: true},
       {pattern: 'unit/browser/*Spec.js', included: true}
