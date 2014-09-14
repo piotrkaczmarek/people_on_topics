@@ -3,13 +3,16 @@ app.controller('userProfileCtrl', function($http, $scope, socketFactory, usersFa
 
   $scope.start = function() {
     $scope.logged_in = true;
-    var socket_connection_callback = function(err) {
-      usersFactory.getUsers(userTopicsFactory.topics, function() {
-        $scope.current_users = usersFactory.users;
-      });
+    var socketConnectionCallback = function(err) {
+      usersFactory.getUsers(userTopicsFactory.topics, function() {});
+    };
+    var successCallback = function(data) {
+      $scope.current_user.name = data.user_name;
+      currentUser.setUser($scope.current_user);
+      socketFactory.connect(data.token,socketConnectionCallback);
     };
 
-    if(Object.keys(userTopicsFactory.topics).length === 0) {
+    if(userTopicsFactory.topics.length === 0) {
       $scope.logged_in = false;
       $scope.errors = {topics: 'You need to choose at least one topic'};
     } else {
@@ -17,9 +20,7 @@ app.controller('userProfileCtrl', function($http, $scope, socketFactory, usersFa
       $http.post('/sign_in', {user:$scope.current_user, topics: userTopicsFactory.topics}).
         success(function(data) {
           if(data.valid) {
-            $scope.current_user.name = data.user_name;
-            currentUser.setUser($scope.current_user);
-            socketFactory.connect(data.token,socket_connection_callback);
+            successCallback(data);
           } else {
             $scope.logged_in = false;
             $scope.errors = data.errors;
@@ -29,6 +30,5 @@ app.controller('userProfileCtrl', function($http, $scope, socketFactory, usersFa
           $scope.logged_in = false;
         }); 
     }
-
   };
 });
