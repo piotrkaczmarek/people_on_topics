@@ -2,7 +2,7 @@
 <div class='topic_tag' ng-repeat='topic in topics'>
   {{topic}}
 </div>
-<form name='userTopicsForm'>
+<form name='userTopicsForm' ng-hide='logged_in'>
   <input ng-model='new_topic' type='text' placeholder='What you want to talk about...'/>
   <button id='add_topic_button' class='btn btn-primary btn-sm' ng-click='add_topic()'>
     Add
