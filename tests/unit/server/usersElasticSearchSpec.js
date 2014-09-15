@@ -1,5 +1,5 @@
 describe('usersElasticSearch', function() {
-  var usersElasticSearch = require('../../../app/server/usersElasticSearch').UsersElasticSearch;
+  var usersElasticSearch = require('../../../app/server/models/usersElasticSearch').UsersElasticSearch;
   var elasticsearch = require('elasticsearch');
 
   var client = new elasticsearch.Client({

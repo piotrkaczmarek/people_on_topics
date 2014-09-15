@@ -6,12 +6,12 @@
     redis = require('redis'),
     routes = require('./routes'),
     config = require('./config/defaults'),
-    socketController = require('./socketController'),
+    socketController = require('./controllers/socketController'),
     socketio = require('socket.io'),
     socketIoJwt = require('socketio-jwt'),
-    socketRedisCoordinator = require('./socketRedisCoordinator'),
+    socketRedisCoordinator = require('./controllers/socketRedisCoordinator'),
     elasticsearch = require('elasticsearch'),
-    UsersElasticSearch = require('./usersElasticSearch').UsersElasticSearch;
+    UsersElasticSearch = require('./models/usersElasticSearch').UsersElasticSearch;
 
 
   var Application = function() {
