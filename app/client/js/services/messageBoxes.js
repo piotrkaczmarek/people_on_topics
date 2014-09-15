@@ -44,6 +44,14 @@ app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
       }
     });
   };
+  var _closeMsgBox = function(userName) {
+    for(var i = 0; i < _messageBoxes.length; i++) {
+      if(_messageBoxes[i].user.name === userName) {
+        _messageBoxes.splice(i,1);
+        return;
+      }
+    }
+  };
 
   $rootScope.$on('message', function(event,data) {
     var message = JSON.parse(data);
@@ -53,6 +61,7 @@ app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
   return {
     messageBoxes: _messageBoxes,
     create: _create,
+    closeMsgBox: _closeMsgBox,
     addMessage: _addMessage
   };
 });

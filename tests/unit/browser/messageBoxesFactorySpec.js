@@ -44,6 +44,25 @@ describe('messageBoxesFactory', function() {
       });
     });
   });
+  describe('.closeMsgBox', function() {
+    var factory;
+    beforeEach(function() {
+      module('peopleOnTopicsApp');
+      inject(function(messageBoxesFactory) {
+        factory = messageBoxesFactory;
+      });
+    });
+    describe('when there is opened message box', function() {
+      beforeEach(function() {
+        factory.create({name: 'bob'}, function() {})
+      });
+      it('should delete the message box', function() {
+        factory.closeMsgBox('bob', function() {
+          expect(factory.messageBoxes.length).toEqual(0);
+        });
+      });
+    });
+  });
   describe('.addMessage', function() {
     describe('when receiving', function() {
       describe('when there conversation with given person has already been started', function() {
