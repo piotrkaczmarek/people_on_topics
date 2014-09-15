@@ -2,6 +2,9 @@
   <span class='label label-primary'>
     {{messageBox.user.name}} {{messageBox.user.age}} {{messageBox.user.sex}}
   </span>
+  <span class='btn btn-default btn-xs close-button' ng-click='close(messageBox.user.name)'>
+    X
+  </span>
 </div>
 <div class='message-box-body'>
   <ul>

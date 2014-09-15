@@ -1,4 +1,7 @@
 .message-box-body {
   height: 200px;
   overflow-y: scroll;
+}
+.close-button {
+  float: right;
 };

@@ -8,4 +8,8 @@ app.controller('conversationCtrl', function($scope, socketFactory,messageBoxesFa
       this.newMessage = "";
     });
   };
+
+  $scope.close = function(name) {
+    messageBoxesFactory.closeMsgBox(name);
+  };
 });
