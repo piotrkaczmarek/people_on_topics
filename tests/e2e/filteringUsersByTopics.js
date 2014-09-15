@@ -1,5 +1,5 @@
 describe('filteringUsersByTopics', function() {
-  var log_in = require('./common').log_in;
+  var log_in = require('./helpers').log_in;
   var browserOne = protractors[0].browser;
   var browserTwo = protractors[1].browser;
   var redis = require('redis').createClient();
