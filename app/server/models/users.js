@@ -1,10 +1,10 @@
-function UsersElasticSearch(db) {
+function Users(db) {
   var async = require('async');
     /* If this constructor is called without the "new" operator, "this" points
    * to the global object. Log a warning and call it correctly. */
-  if(false === (this instanceof UsersElasticSearch)) {
-    console.log('Error: UsersElasticSearch constructor called without "new" operator');
-    return new Error('Error: UsersElasticSearch constructor called without "new" operator');
+  if(false === (this instanceof Users)) {
+    console.log('Error: Users constructor called without "new" operator');
+    return new Error('Error: Users constructor called without "new" operator');
   }
 
   var topicsQuery = function(topics) {
@@ -111,4 +111,4 @@ function UsersElasticSearch(db) {
   };
 }
 
-module.exports.UsersElasticSearch = UsersElasticSearch;
+module.exports.Users = Users;

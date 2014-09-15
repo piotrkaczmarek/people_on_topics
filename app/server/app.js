@@ -11,7 +11,7 @@
     socketIoJwt = require('socketio-jwt'),
     socketRedisCoordinator = require('./controllers/socketRedisCoordinator'),
     elasticsearch = require('elasticsearch'),
-    UsersElasticSearch = require('./models/usersElasticSearch').UsersElasticSearch;
+    Users = require('./models/users').Users;
 
 
   var Application = function() {
@@ -28,7 +28,7 @@
       var esClient = elasticsearch.Client({
         host: self.elasticsearchHost
       });
-      self.usersDAO = new UsersElasticSearch(esClient);
+      self.users = new Users(esClient);
     };
     var setupServer = function() {
       self.expressApp = express();
@@ -42,7 +42,7 @@
       });
     };
     var setupRoutes = function() {
-      routes(self.expressApp, self.usersDAO, self.tokenSecret);
+      routes(self.expressApp, self.users, self.tokenSecret);
     };
     var setupSocket = function() {
       self.io = socketio.listen(self.server);
@@ -57,7 +57,7 @@
         {auth_pass: config.redis.password}
       );
       socketController(redisPublisher, self.io, socketIoJwt, self.tokenSecret);
-      socketRedisCoordinator(redisSubscriber, self.usersDAO, self.io);
+      socketRedisCoordinator(redisSubscriber, self.users, self.io);
     }
     self.initialize = function() {
       setupVariables();

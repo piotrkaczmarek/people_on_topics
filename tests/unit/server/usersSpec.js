@@ -1,11 +1,11 @@
-describe('usersElasticSearch', function() {
-  var usersElasticSearch = require('../../../app/server/models/usersElasticSearch').UsersElasticSearch;
+describe('Users', function() {
+  var Users = require('../../../app/server/models/users').Users;
   var elasticsearch = require('elasticsearch');
 
   var client = new elasticsearch.Client({
     host: 'localhost:9200'
   });
-  var usersES = new usersElasticSearch(client);
+  var usersES = new Users(client);
   var add_user = function(user, topics, callback) {
     usersES.save(user,topics,function(err,response) {
       client.indices.refresh({index:'users'}, function() {
