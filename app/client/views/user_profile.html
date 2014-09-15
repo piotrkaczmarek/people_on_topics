@@ -1,19 +1,19 @@
 <div class='btn btn-primary btn-med'>
-  You : {{current_user.name}}  {{current_user.sex}} {{current_user.age}}
+  You : {{currentUser.name}}  {{currentUser.sex}} {{currentUser.age}}
 </div>
-<div ng-hide='logged_in'>
+<div ng-hide='loggedIn'>
   <form name='userProfileForm'>
     <label>Your name:</label>
-    <input ng-model='current_user.name' type='name' placeholder='Please enter your name' />
+    <input ng-model='currentUser.name' type='name' placeholder='Please enter your name' />
     <br>
     <label>Your age:</label>
-    <input ng-model='current_user.age' type='number' min=13 max=99 ui-mask="{{'99'}}"/>
+    <input ng-model='currentUser.age' type='number' min=13 max=99 ui-mask="{{'99'}}"/>
     <br>
     <div class='btn-group'>
-      <button type='button' class='btn btn-default btn-sm' ng-click="current_user.sex='male'">
+      <button type='button' class='btn btn-default btn-sm' ng-click="currentUser.sex='male'">
         Male
       </button>
-      <button type='button' class='btn btn-default btn-sm' ng-click="current_user.sex='female'">
+      <button type='button' class='btn btn-default btn-sm' ng-click="currentUser.sex='female'">
         Female
       </button>
     </div>

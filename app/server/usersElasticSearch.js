@@ -7,7 +7,7 @@ function UsersElasticSearch(db) {
     return new Error('Error: UsersElasticSearch constructor called without "new" operator');
   }
 
-  var topics_query = function(topics) {
+  var topicsQuery = function(topics) {
     var body = {
       query: {      
         bool: {
@@ -26,7 +26,7 @@ function UsersElasticSearch(db) {
     });
     return body;
   };
-  var make_users_array = function(response, callback) {
+  var makeUsersArray = function(response, callback) {
     var users = [];
     var iterator = function(item, cb) {
       var user = item._source;
@@ -38,17 +38,17 @@ function UsersElasticSearch(db) {
       callback(users);
     });
   };
-  this.get_all_users_by_topics = function(topics, callback) {
-    db.search({index: 'users', type: 'user', body: topics_query(topics)}, function(err, response) {
+  this.getAllUsersByTopics = function(topics, callback) {
+    db.search({index: 'users', type: 'user', body: topicsQuery(topics)}, function(err, response) {
       if(err) throw err;
-      make_users_array(response,callback);
+      makeUsersArray(response,callback);
     });
   };
-  this.get_users_by_topics = function(usernames, topics, callback) {
+  this.getUsersByTopics = function(usernames, topics, callback) {
     var body = {
       query: {
         filtered: {
-          query: topics_query(topics).query,
+          query: topicsQuery(topics).query,
           filter: {
             ids: {
               values: usernames
@@ -59,17 +59,17 @@ function UsersElasticSearch(db) {
     };
     db.search({index: 'users', type: 'user', body: body}, function(err, response) {
       if(err) throw err;
-      make_users_array(response,callback);
+      makeUsersArray(response,callback);
     });
   };
   this.add = function(user,topics, callback) {
-    var save_user = this.save;
-    var times_checked = 0;
-    var save_unique = function(self, cb) {
-      save_user(user, topics, function(err,response) {
+    var saveUser = this.save;
+    var timesChecked = 0;
+    var saveUnique = function(self, cb) {
+      saveUser(user, topics, function(err,response) {
         if(err && err.message.slice(0,21) === 'DocumentAlreadyExists') {
-          times_checked += 1;
-          user.name += '_'+ times_checked;
+          timesChecked += 1;
+          user.name += '_'+ timesChecked;
           return self(self,cb);
         } else if(err) {
           throw err;
@@ -78,7 +78,7 @@ function UsersElasticSearch(db) {
         }
       });
     };
-    save_unique(save_unique, callback);
+    saveUnique(saveUnique, callback);
   };
   this.save = function(user,topics,callback) {
     var doc = {
@@ -93,14 +93,14 @@ function UsersElasticSearch(db) {
       callback(err,response);
     });
   };
-  this.remove = function(user_name, callback) {
-    db.delete({index: 'users', type: 'user', id: user_name}, function(err,response) {
+  this.remove = function(userName, callback) {
+    db.delete({index: 'users', type: 'user', id: userName}, function(err,response) {
       if(err && err.message !== 'Not Found') throw err;
       callback();
     });
   };
-  this.get = function(user_name, callback) {
-    db.get({index: 'users', type:'user', id: user_name}, function(err, response) {
+  this.get = function(userName, callback) {
+    db.get({index: 'users', type:'user', id: userName}, function(err, response) {
       if(err && err.message !== 'Not Found') throw err;
       if(response.found) {
         callback(response._source);

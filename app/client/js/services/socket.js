@@ -9,7 +9,7 @@ app.factory('socketFactory', function($rootScope) {
     });
     registerEvents(_socket);
   };
-  var _send_message = function(recipient, body) {
+  var _sendMessage = function(recipient, body) {
     _socket.emit('message', 
       {
         to: recipient,
@@ -39,6 +39,6 @@ app.factory('socketFactory', function($rootScope) {
   };
   return {
     connect: _connect,
-    send_message: _send_message
+    sendMessage: _sendMessage
   };
 });

@@ -5,16 +5,16 @@
     redisSubscriber.subscribe('joins', 'leaves', 'message_sent');
     
     redisSubscriber.on('message', function(channel, message) {
-      var add_user = function(message) {
+      var addUser = function(message) {
         io.sockets.emit('joins', message);
       };
-      var remove_user = function(message) {
+      var removeUser = function(message) {
         usersDAO.remove(message, function() {
           console.log('Removed ',message);
           io.sockets.emit('leaves', message);
         });
       };
-      var send_message = function(message) {
+      var sendMessage = function(message) {
         var recipient = JSON.parse(message).to;
         for(var socket in io.sockets.connected) {
           if(io.sockets.connected.hasOwnProperty(socket) &&
@@ -26,11 +26,11 @@
       };
       console.log('redisSubscriber got: ',message," on: ",channel);
       if(channel === 'joins') {
-        add_user(message);
+        addUser(message);
       } else if(channel === 'leaves') {
-        remove_user(message);
+        removeUser(message);
       } else if(channel === 'message_sent') {
-        send_message(message);
+        sendMessage(message);
       }
     });
   };

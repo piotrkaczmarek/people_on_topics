@@ -40,7 +40,7 @@ describe('usersElasticSearch', function() {
       });
     });
   });
-  describe('.get_all_users_by_topics', function() {
+  describe('.getAllUsersByTopics', function() {
     describe('when there are two topics queried', function() {
       describe('and there two users who have these topics', function() {
         var users = { 
@@ -74,13 +74,13 @@ describe('usersElasticSearch', function() {
           }
         });
         it('should return only users that have these topics', function(done) {
-          usersES.get_all_users_by_topics(['topic1', 'topic2'], function(data) {
+          usersES.getAllUsersByTopics(['topic1', 'topic2'], function(data) {
             expect(data.length).toEqual(2);
             done();
           });
         });
         it('should give higher score for those who match more topics', function(done) {
-          usersES.get_all_users_by_topics(['topic1', 'topic2'], function(data) {
+          usersES.getAllUsersByTopics(['topic1', 'topic2'], function(data) {
             for(var i = 0; i < data.length; i++) {
               if(data[i].name === 'bob'){
                 var bob_score = data[i].score;
@@ -96,7 +96,7 @@ describe('usersElasticSearch', function() {
       });
       describe('and there are no users who have these topics', function() {
         it('should return empty object', function(done) {
-          usersES.get_all_users_by_topics(['topic1'], function(data) {
+          usersES.getAllUsersByTopics(['topic1'], function(data) {
             expect(data).toEqual({});
             done();
           });
@@ -104,7 +104,7 @@ describe('usersElasticSearch', function() {
       });
     });
   });
-  describe('.get_users_by_topics', function() {
+  describe('.getUsersByTopics', function() {
     var users = { 
       'bob':{
         name: 'bob',
@@ -136,13 +136,13 @@ describe('usersElasticSearch', function() {
       }
     });
     it('should return only queried users', function(done) {
-      usersES.get_users_by_topics(['susan'],['topic3'], function(data) {
+      usersES.getUsersByTopics(['susan'],['topic3'], function(data) {
         expect(data.length).toEqual(1);
         done();
       });
     });
     it('he should get the same score as when getting the whole list', function(done) {
-      usersES.get_users_by_topics(['bob'],['topic1', 'topic2'], function(data) {
+      usersES.getUsersByTopics(['bob'],['topic1', 'topic2'], function(data) {
         for(var i = 0; i < data.length; i++) {
           if(data[i].name === 'bob') {
             var bob_score = data[i].score;
@@ -153,7 +153,7 @@ describe('usersElasticSearch', function() {
       });
     });
     it('he should get the same score as when getting the whole list', function(done) {
-      usersES.get_users_by_topics(['susan'],['topic1', 'topic2'], function(data) {
+      usersES.getUsersByTopics(['susan'],['topic1', 'topic2'], function(data) {
         for(var i = 0; i < data.length; i++) {
           if(data[i].name === 'susan') {
             var susan_score = data[i].score;

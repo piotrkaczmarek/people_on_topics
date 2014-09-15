@@ -3,14 +3,14 @@ function UsersHandler (usersDAO) {
 
   this.handleGetUserList = function(req, res, next) {
     var topics = [].concat(req.query.topics);
-    usersDAO.get_all_users_by_topics(topics,function(users) {
+    usersDAO.getAllUsersByTopics(topics,function(users) {
       return res.send(users);
     });
   };
   this.handleGetPartialUserList = function(req,res,next) {
     var usernames = [].concat(req.query.users);
     var topics = [].concat(req.query.topics);
-    usersDAO.get_users_by_topics(usernames, topics, function(users) {
+    usersDAO.getUsersByTopics(usernames, topics, function(users) {
       return res.send(users);
     });
   };

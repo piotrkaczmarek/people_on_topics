@@ -1,6 +1,6 @@
 app.factory('userTopicsFactory', function() {
   var _topics = [];
-  var _add_topic = function(name) {
+  var _addTopic = function(name) {
     var sanitize = function(string) {
       string = string.trim();
       var topic_name = string.substr(0,12).toLowerCase();
@@ -9,7 +9,7 @@ app.factory('userTopicsFactory', function() {
       }
       return topic_name;
     };
-    var check_if_unique = function(topic) {
+    var checkIfUnique = function(topic) {
       for(var i = 0; i < _topics.length; i++) {
         if(_topics[i] === topic) {
           return false;
@@ -18,7 +18,7 @@ app.factory('userTopicsFactory', function() {
       return true;
     };
     var topic = sanitize(name);
-    if(check_if_unique(topic)) {
+    if(checkIfUnique(topic)) {
       _topics.push(topic);
     }
   };
@@ -34,7 +34,7 @@ app.factory('userTopicsFactory', function() {
   };
   return {
     topics: _topics,
-    add_topic: _add_topic,
+    addTopic: _addTopic,
     matches: _matches
   };
 });

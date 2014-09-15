@@ -2,9 +2,9 @@ app.controller('conversationCtrl', function($scope, socketFactory,messageBoxesFa
   var user = $scope.user;
 
   $scope.send = function() {
-    socketFactory.send_message(this.messageBox.user.name, this.new_message);
+    socketFactory.sendMessage(this.messageBox.user.name, this.newMessage);
     var user = currentUser.getUser();
-    messageBoxesFactory.add_message(this.messageBox.user.name, user.name, this.new_message);
-    this.new_message = "";
+    messageBoxesFactory.addMessage(this.messageBox.user.name, user.name, this.newMessage);
+    this.newMessage = "";
   };
 });

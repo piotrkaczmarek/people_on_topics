@@ -10,11 +10,11 @@ app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
     };
     return true;
   };
-  var _add_message = function(interlocutor, from, body, callback) {
+  var _addMessage = function(interlocutor, from, body, callback) {
     if(!callback) {
       callback = function() {};
     }
-    var append_message = function() {
+    var appendMessage = function() {
       _messageBoxes[interlocutor].messages.push({
         from: from,
         body: body
@@ -24,24 +24,24 @@ app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
       usersFactory.getUser(interlocutor, function(user) {
         if(user) {
           _create(user);
-          append_message();
+          appendMessage();
         }
         callback();
       });
     } else {
-      append_message();
+      appendMessage();
       callback();
     }
   };
 
   $rootScope.$on('message', function(event,data) {
     var message = JSON.parse(data);
-    _add_message(message.from,message.from, message.body);
+    _addMessage(message.from,message.from, message.body);
   });
 
   return {
     messageBoxes: _messageBoxes,
     create: _create,
-    add_message: _add_message
+    addMessage: _addMessage
   };
 });

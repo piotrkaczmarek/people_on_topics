@@ -21,12 +21,12 @@
       var argv = require('minimist')(process.argv.slice(2));
 
       self.port =  argv.p || config.serverPort;
-      self.token_secret = config.tokenSecret;
-      self.elasticsearch_host = config.elasticsearchHost;
+      self.tokenSecret = config.tokenSecret;
+      self.elasticsearchHost = config.elasticsearchHost;
     };
     var setupDB = function() {
       var esClient = elasticsearch.Client({
-        host: self.elasticsearch_host
+        host: self.elasticsearchHost
       });
       self.usersDAO = new UsersElasticSearch(esClient);
     };
@@ -42,7 +42,7 @@
       });
     };
     var setupRoutes = function() {
-      routes(self.expressApp, self.usersDAO, self.token_secret);
+      routes(self.expressApp, self.usersDAO, self.tokenSecret);
     };
     var setupSocket = function() {
       self.io = socketio.listen(self.server);
@@ -56,7 +56,7 @@
         config.redis.host, 
         {auth_pass: config.redis.password}
       );
-      socketController(redisPublisher, self.io, socketIoJwt, self.token_secret);
+      socketController(redisPublisher, self.io, socketIoJwt, self.tokenSecret);
       socketRedisCoordinator(redisSubscriber, self.usersDAO, self.io);
     }
     self.initialize = function() {

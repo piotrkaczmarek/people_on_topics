@@ -1,5 +1,5 @@
 exports.validate = function(user) {
-  var validate_name = function(name) {
+  var validateName = function(name) {
     if(!name || name.length === 0) {
       return {
         valid: false,
@@ -14,5 +14,5 @@ exports.validate = function(user) {
       };
     }
   };
-  return validate_name(user.name);
+  return validateName(user.name);
 };

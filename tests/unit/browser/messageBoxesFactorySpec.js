@@ -32,7 +32,7 @@ describe('messageBoxesFactory', function() {
       describe('when the conversation has already been started', function() {
         beforeEach(function() {
           factory.create(user);
-          factory.add_message(user.name,user.name, 'Hello!', function() {});
+          factory.addMessage(user.name,user.name, 'Hello!', function() {});
         });
         it('should not delete previous messages', function () {
           factory.create(user);
@@ -41,7 +41,7 @@ describe('messageBoxesFactory', function() {
       });
     });
   });
-  describe('.add_message', function() {
+  describe('.addMessage', function() {
     describe('when receiving', function() {
       describe('when there conversation with given person has already been started', function() {
         var factory;
@@ -65,17 +65,17 @@ describe('messageBoxesFactory', function() {
           factory.create(user);
         });
         it('should append new message', function() {
-          factory.add_message('Johnny','Johnny', 'Hello Bob!', function() {
+          factory.addMessage('Johnny','Johnny', 'Hello Bob!', function() {
             expect(factory.messageBoxes['Johnny'].messages.length).toEqual(1);
           });
         });
         it('should save sender name', function() {
-          factory.add_message('Johnny','Johnny', 'Hello Bob!', function() {
+          factory.addMessage('Johnny','Johnny', 'Hello Bob!', function() {
             expect(factory.messageBoxes['Johnny'].messages[0].from).toEqual('Johnny');
           });
         });
         it('should save message body', function() {
-          factory.add_message('Johnny','Johnny', 'Hello Bob!', function() {
+          factory.addMessage('Johnny','Johnny', 'Hello Bob!', function() {
             expect(factory.messageBoxes['Johnny'].messages[0].body).toEqual('Hello Bob!');
           });
         });
@@ -102,17 +102,17 @@ describe('messageBoxesFactory', function() {
             });
           });
           it('should append new message', function() {
-            factory.add_message('Johnny','Johnny', 'Hello Bob!', function() {
+            factory.addMessage('Johnny','Johnny', 'Hello Bob!', function() {
               expect(factory.messageBoxes['Johnny'].messages.length).toEqual(1);
             });
           });
           it('should save sender name', function() {
-            factory.add_message('Johnny','Johnny', 'Hello Bob!', function() {
+            factory.addMessage('Johnny','Johnny', 'Hello Bob!', function() {
               expect(factory.messageBoxes['Johnny'].messages[0].from).toEqual('Johnny');
             });
           });
           it('should save message body', function() {
-            factory.add_message('Johnny','Johnny', 'Hello Bob!', function() {
+            factory.addMessage('Johnny','Johnny', 'Hello Bob!', function() {
               expect(factory.messageBoxes['Johnny'].messages[0].body).toEqual('Hello Bob!');
             });
           });
@@ -142,17 +142,17 @@ describe('messageBoxesFactory', function() {
           factory.create(user);
         });
         it('should append new message', function() {
-          factory.add_message('Johnny','Bob', 'Hello Johnny!', function() {
+          factory.addMessage('Johnny','Bob', 'Hello Johnny!', function() {
             expect(factory.messageBoxes['Johnny'].messages.length).toEqual(1);
           });
         });
         it('should save sender name', function() {
-          factory.add_message('Johnny','Bob', 'Hello Johnny!', function() {
+          factory.addMessage('Johnny','Bob', 'Hello Johnny!', function() {
             expect(factory.messageBoxes['Johnny'].messages[0].from).toEqual('Bob');
           });
         });
         it('should save message body', function() {
-          factory.add_message('Johnny','Bob', 'Hello Johnny!', function() {
+          factory.addMessage('Johnny','Bob', 'Hello Johnny!', function() {
             expect(factory.messageBoxes['Johnny'].messages[0].body).toEqual('Hello Johnny!');
           });
         });
