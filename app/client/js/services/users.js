@@ -67,8 +67,8 @@ app.factory('usersFactory', function($http, $rootScope, $filter, $timeout, userT
     }
   });
 
-  $rootScope.$on('leaves', function(event, data) {
-    _removeUser(data);
+  $rootScope.$on('leaves', function(event, name) {
+    _removeUser(name);
   });
 
   return {

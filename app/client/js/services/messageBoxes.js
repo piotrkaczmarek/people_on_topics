@@ -58,6 +58,10 @@ app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
     _addMessage(message.from,message.from, message.body, function() {});
   });
 
+  $rootScope.$on('leaves', function(event, name) {
+    _closeMsgBox(name);
+  });
+
   return {
     messageBoxes: _messageBoxes,
     create: _create,
