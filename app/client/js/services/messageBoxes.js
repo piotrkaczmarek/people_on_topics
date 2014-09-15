@@ -1,42 +1,53 @@
 app.factory('messageBoxesFactory', function(usersFactory, $rootScope) {
-  var _messageBoxes = {};
-  var _create = function(user) {
-    if(_messageBoxes[user.name]) {
-      return true;
-    }
-    _messageBoxes[user.name] = { 
-      user: user,
-      messages: []
+  var _messageBoxes = [];
+  var getUserMsgBox = function(userName, callback) {
+    var iterator = function(item, cb) {
+      cb(item.user.name === userName);
     };
-    return true;
+    async.detect(_messageBoxes, iterator, callback);
+  };
+  var _create = function(user, callback) {
+    var createNewUserMsgBox = function(newUser) {
+      var index = _messageBoxes.push({
+        user: newUser,
+        messages: []
+      });
+      return _messageBoxes[index - 1];
+    };
+    getUserMsgBox(user.name, function(userMsgBox) {
+      if(!userMsgBox) {
+        userMsgBox = createNewUserMsgBox(user);
+      }
+      callback(userMsgBox);
+    });
   };
   var _addMessage = function(interlocutor, from, body, callback) {
-    if(!callback) {
-      callback = function() {};
-    }
-    var appendMessage = function() {
-      _messageBoxes[interlocutor].messages.push({
+    var appendMessage = function(msgBox) {
+      msgBox.messages.push({
         from: from,
         body: body
       });
     };
-    if(!_messageBoxes[interlocutor]) {
-      usersFactory.getUser(interlocutor, function(user) {
-        if(user) {
-          _create(user);
-          appendMessage();
-        }
+    getUserMsgBox(interlocutor, function(userMsgBox) {
+      if(!userMsgBox) {
+        usersFactory.getUser(interlocutor, function(user) {
+          if(user) {
+            _create(user, function(userMsgBox) {
+              appendMessage(userMsgBox);
+            });
+          }
+          callback();
+        });
+      } else {
+        appendMessage(userMsgBox);
         callback();
-      });
-    } else {
-      appendMessage();
-      callback();
-    }
+      }
+    });
   };
 
   $rootScope.$on('message', function(event,data) {
     var message = JSON.parse(data);
-    _addMessage(message.from,message.from, message.body);
+    _addMessage(message.from,message.from, message.body, function() {});
   });
 
   return {
